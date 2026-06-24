@@ -331,6 +331,17 @@ body{
 }
 .site-footer-inner a{color:rgba(255,255,255,.65);text-decoration:none;}
 .site-footer-inner a:hover{color:#FFF;}
+
+/* ── MANTRA EXTRA ────────────────────────────────────── */
+.m-iast{font-size:.8rem;color:var(--text-dim);margin-bottom:2px;letter-spacing:.07em;font-style:italic;}
+.m-translit{font-size:.75rem;color:var(--text-faint);margin-bottom:18px;letter-spacing:.04em;}
+.m-btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+.m-mala{margin:16px auto 0;max-width:360px;text-align:left;background:var(--card-alt);border:1px solid var(--acc);border-radius:var(--r);padding:10px 14px;}
+.m-mala-lbl{font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
+.m-mala-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;}
+.m-mala-uni{font-size:.71rem;color:var(--text-faint);font-style:italic;}
+/* ── SIM PLANET DAYS ─────────────────────────────────── */
+.sim-p-days{font-size:.64rem;color:var(--red);font-weight:700;margin-top:1px;letter-spacing:.02em;}
 </style>
 </head>
 <body>
@@ -392,7 +403,7 @@ body{
     <div class="sim-step on" id="ss1">
       <div class="sim-card-hd"><div class="sim-card-num">1</div><div><div class="sim-card-title">Выбор планеты</div><div class="sim-card-sub">Каждая планета — свой день, своя энергия</div></div></div>
       <div class="sim-body">
-        <div class="hint"><strong>Ключевое правило:</strong> ритуал проводится строго в день планеты. Исключение — можно начать за сутки до нужного дня.</div>
+        <div class="hint"><strong>Ключевое правило:</strong> чистка начинается на <strong>убывающей (спадающей) луне</strong> в день планеты. Допустимо начать за сутки до нужного дня. Продолжать <strong>9 или 11 дней подряд</strong> — в зависимости от планеты.</div>
         <div class="sim-planets" id="sim-planets"></div>
       </div>
       <div class="sim-footer">
@@ -494,6 +505,8 @@ body{
       <div class="sim-body">
         <div class="mantra-center">
           <div class="m-text" id="m-text"></div>
+          <div class="m-iast" id="m-iast"></div>
+          <div class="m-translit" id="m-translit"></div>
           <div class="m-meaning" id="m-meaning"></div>
           <div class="m-ring-wrap" onclick="mCount()" id="m-ring">
             <svg class="m-svg" viewBox="0 0 130 130">
@@ -516,7 +529,16 @@ body{
           </div>
           <div class="m-bar-wrap"><div class="m-bar" id="m-bar" style="width:0%"></div></div>
           <div class="m-status" id="m-status">Нажмите на круг для каждого повторения</div>
-          <button class="btn-ghost" onclick="mReset()" style="font-size:.75rem;padding:5px 14px;margin-top:6px">Сбросить</button>
+          <div class="m-btn-row">
+            <button class="btn-ghost" id="m-auto-btn" onclick="mAuto()" style="font-size:.75rem;padding:5px 14px">▶ Авто</button>
+            <button class="btn-ghost" onclick="mFast()" style="font-size:.75rem;padding:5px 14px">+10</button>
+            <button class="btn-ghost" onclick="mReset()" style="font-size:.75rem;padding:5px 14px">↺ Сброс</button>
+          </div>
+          <div class="m-mala" id="m-mala">
+            <div class="m-mala-lbl">📿 Четки для этой мантры</div>
+            <div class="m-mala-chips" id="m-mala-chips"></div>
+            <div class="m-mala-uni">🙏 Рудракша — универсальные для всех планет</div>
+          </div>
         </div>
       </div>
       <div class="sim-footer">
@@ -546,15 +568,15 @@ body{
 
 <script>
 const P = {
-  sun:     { id:'sun',     name:'Солнце',  nameRu:'Сурья',  sym:'☀️',  day:'Воскресенье', dir:'Восток',        color:'#E8A030', mantra:'ОМ СУМ СУРЬЯЕЙ НАМАХА',    mantraMeaning:'Приветствие Сурье — богу Солнца, дарующему жизнь и свет',        lampOil:'Подсолнечное или гхи',    filler:['Пальмовый сахар','Гур','Пшеничная мука'],                                                          oils:['Жасминовое','Сандал','Апельсин'],       mats:['Медь','Золото','Рубин','Пшеница','Мёд','Куркума','Жёлтый цветок'],                                     doshas:['Питри доша (Сатурн + Солнце)','Аспект Раху/Кету на Солнце — ½ эффекта'] },
-  moon:    { id:'moon',    name:'Луна',    nameRu:'Чандра', sym:'🌙',  day:'Понедельник', dir:'Северо-Запад',  color:'#5888B8', mantra:'ОМ ЧАМ ЧАНДРАЕЙ НАМАХА',  mantraMeaning:'Приветствие Чандре — богу Луны, управляющему умом и эмоциями', lampOil:'Кокосовое или кунжутное', filler:['Морская соль'],                                                                                    oils:['Кокосовое','Жасминовое','Роза'],        mats:['Жемчуг','Лунный камень','Белый рис','Молоко','Кокос','Серебро'],                                       doshas:['Матри доша (Сатурн + Луна)','Аспект Раху/Кету на Луну — ½ эффекта'] },
-  mars:    { id:'mars',    name:'Марс',    nameRu:'Мангала',sym:'♂️',  day:'Вторник',     dir:'Юг',            color:'#D82020', mantra:'ОМ МАНГ МАНГАЛАЙЕ НАМАХА', mantraMeaning:'Приветствие Мангале — Марсу, планете силы, воли и действия',    lampOil:'Жасминовое или гхи',      filler:['Каменная розовая соль','Соль мёртвого моря'],                                                       oils:['Жасминовое','Сладкий миндаль','Ладан','Сандал','Корица','Гвоздика'], mats:['Красный коралл','Рубин','Мёд','Сахар','Каменная розовая соль','Фенхель','Куркума','Чили','Чёрный перец','Имбирь','Корица','Гвоздика','Ладан','Камфора','Соль мёртвого моря','Сандаловое дерево','Гранат','Масур дал'], doshas:['Куджа доша: Марс в 1, 2, 4, 7, 8, 12 доме','Пишача доша (Марс + Раху + Кету + Сатурн)','Марс нича (в слабом знаке)'] },
-  mercury: { id:'mercury', name:'Меркурий',nameRu:'Будха',  sym:'☿',  day:'Среда',       dir:'Север',         color:'#38A838', mantra:'ОМ БУМ БУДДХАЕЙ НАМАХА',   mantraMeaning:'Приветствие Будхе — Меркурию, планете интеллекта',              lampOil:'Кунжутное',               filler:['Соль (любая)','Сахар (любой)'],                                                                     oils:['Кунжутное','Мята','Эвкалипт'],          mats:['Изумруд','Нефрит','Маш-дал (зелёная чечевица)','Мята','Зелёный кардамон','Фенхель'],                    doshas:['Меркурий нича или слабый','Меркурий ретроградный'] },
-  jupiter: { id:'jupiter', name:'Юпитер',  nameRu:'Гуру',   sym:'♃',  day:'Четверг',     dir:'Северо-Восток', color:'#C4A000', mantra:'ОМ ГУМ ГУРУВЕ НАМАХА',     mantraMeaning:'Приветствие Гуру — Юпитеру, планете мудрости и благодати',     lampOil:'Гхи',                     filler:['Пальмовый сахар','Тростниковый сахар','Гур','Куркума','Нутовая мука'],                              oils:['Гхи','Сандал','Лимон'],                 mats:['Жёлтый сапфир','Топаз','Нутовая мука','Куркума','Гур','Бананы','Жёлтые цветы'],                        doshas:['Брахма доша (Сатурн + Юпитер)','Чандала доша (Юпитер + Раху)','Юпитер нича'] },
-  venus:   { id:'venus',   name:'Венера',  nameRu:'Шукра',  sym:'♀',  day:'Пятница',     dir:'Юго-Восток',    color:'#C060A0', mantra:'ОМ ШУМ ШУКРАЕЙ НАМАХА',    mantraMeaning:'Приветствие Шукре — Венере, планете любви и красоты',          lampOil:'Кунжутное',               filler:['Морская соль'],                                                                                     oils:['Кунжутное','Роза','Жасмин','Иланг-иланг'],mats:['Алмаз','Белый сапфир','Белый рис','Сахар','Молоко','Роза','Жасмин','Белый шёлк'],                      doshas:['Венера нича','Венера в слабом положении'] },
-  saturn:  { id:'saturn',  name:'Сатурн',  nameRu:'Шани',   sym:'♄',  day:'Суббота',     dir:'Запад',         color:'#5868C0', mantra:'ОМ ШАМ ШАНАЙЕ НАМАХА',     mantraMeaning:'Приветствие Шани — Сатурну, планете кармы и справедливости',   lampOil:'Горчичное или ореховое',  filler:['Каменная соль (особенно чёрная)'],                                                                  oils:['Кипарис','Ладан','Мирра','Эвкалипт','Сандал','Чёрный кунжут','Пачули','Горчичное'], mats:['Каменная соль','Камфора','Священный базилик','Аметист','Сапфир','Сталь','Железо','Уголь','Миндаль','Чёрный кунжут (семена)'], doshas:['Матри доша (Сатурн + Луна)','Питри доша (Сатурн + Солнце)','Брахма доша (Сатурн + Юпитер)','Пишача доша (Марс + Раху + Кету + Сатурн)'] },
-  rahu:    { id:'rahu',    name:'Раху',    nameRu:'Раху',   sym:'☊',  day:'Суббота',     dir:'Юго-Запад',     color:'#8040A8', mantra:'ОМ РАМ РАХАВЭ НАМАХА',     mantraMeaning:'Приветствие Раху — северному лунному узлу, планете иллюзий',   lampOil:'Горчичное',               filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Кокос','Лаванда','Сандаловое дерево','Анис','Сладкий миндаль','Горчица','Ячмень','Сапфир','Цирконий','Апатит'], doshas:['Затмение (Раху + Солнце/Луна)','Чандала доша (Юпитер + Раху)','Каласарпа доша (все планеты между Раху и Кету)'] },
-  ketu:    { id:'ketu',    name:'Кету',    nameRu:'Кету',   sym:'☋',  day:'Четверг',     dir:'Северо-Восток', color:'#806040', mantra:'ОМ КЕЙМ КЕТАВЭ НАМАХА',    mantraMeaning:'Приветствие Кету — южному лунному узлу, планете мокши',       lampOil:'Горчичное',               filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Камфора','Ваниль','Сандаловое дерево','Сезам','Сладкий миндаль','Банан','Кошачий глаз'], doshas:['Затмение (Кету + Солнце/Луна)','Пишача доша (Кету + Марс)','Каласарпа доша (все планеты между Раху и Кету)'] },
+  sun:     { id:'sun',     name:'Солнце',  nameRu:'Сурья',  sym:'☀️',  day:'Воскресенье', dir:'Восток',        color:'#E8A030', mantra:'ОМ СУМ СУРЬЯЕЙ НАМАХА',    mantraMeaning:'Приветствие Сурье — богу Солнца, дарующему жизнь и свет',        lampOil:'Подсолнечное или гхи',    filler:['Пальмовый сахар','Гур','Пшеничная мука'],                                                          oils:['Жасминовое','Сандал','Апельсин'],       mats:['Медь','Золото','Рубин','Пшеница','Мёд','Куркума','Жёлтый цветок'],                                     doshas:['Питри доша (Сатурн + Солнце)','Аспект Раху/Кету на Солнце — ½ эффекта'], days:9, mala:['Рубин','Сердолик','Родолит'], mantraIAST:'Oṃ Sūṃ Sūryāya Namaḥ', mantraTranslit:'Ом Су:м Су:рьа:йа Намаха' },
+  moon:    { id:'moon',    name:'Луна',    nameRu:'Чандра', sym:'🌙',  day:'Понедельник', dir:'Северо-Запад',  color:'#5888B8', mantra:'ОМ ЧАМ ЧАНДРАЕЙ НАМАХА',  mantraMeaning:'Приветствие Чандре — богу Луны, управляющему умом и эмоциями', lampOil:'Кокосовое или кунжутное', filler:['Морская соль'],                                                                                    oils:['Кокосовое','Жасминовое','Роза'],        mats:['Жемчуг','Лунный камень','Белый рис','Молоко','Кокос','Серебро'],                                       doshas:['Матри доша (Сатурн + Луна)','Аспект Раху/Кету на Луну — ½ эффекта'], days:9, mala:['Жемчуг','Лунный камень','Белый кварц'], mantraIAST:'Oṃ Caṃ Candrāya Namaḥ', mantraTranslit:'Ом Чам Чандра:йа Намаха' },
+  mars:    { id:'mars',    name:'Марс',    nameRu:'Мангала',sym:'♂️',  day:'Вторник',     dir:'Юг',            color:'#D82020', mantra:'ОМ МАНГ МАНГАЛАЙЕ НАМАХА', mantraMeaning:'Приветствие Мангале — Марсу, планете силы, воли и действия',    lampOil:'Жасминовое или гхи',      filler:['Каменная розовая соль','Соль мёртвого моря'],                                                       oils:['Жасминовое','Сладкий миндаль','Ладан','Сандал','Корица','Гвоздика'], mats:['Красный коралл','Рубин','Мёд','Сахар','Каменная розовая соль','Фенхель','Куркума','Чили','Чёрный перец','Имбирь','Корица','Гвоздика','Ладан','Камфора','Соль мёртвого моря','Сандаловое дерево','Гранат','Масур дал'], doshas:['Куджа доша: Марс в 1, 2, 4, 7, 8, 12 доме','Пишача доша (Марс + Раху + Кету + Сатурн)','Марс нича (в слабом знаке)'], days:9, mala:['Коралл','Сердолик'], mantraIAST:'Oṃ Māṃ Maṅgalāya Namaḥ', mantraTranslit:'Ом Ма:м Мангала:йа Намаха' },
+  mercury: { id:'mercury', name:'Меркурий',nameRu:'Будха',  sym:'☿',  day:'Среда',       dir:'Север',         color:'#38A838', mantra:'ОМ БУМ БУДДХАЕЙ НАМАХА',   mantraMeaning:'Приветствие Будхе — Меркурию, планете интеллекта',              lampOil:'Кунжутное',               filler:['Соль (любая)','Сахар (любой)'],                                                                     oils:['Кунжутное','Мята','Эвкалипт'],          mats:['Изумруд','Нефрит','Маш-дал (зелёная чечевица)','Мята','Зелёный кардамон','Фенхель'],                    doshas:['Меркурий нича или слабый','Меркурий ретроградный'], days:9, mala:['Нефрит','Изумруд'], mantraIAST:'Oṃ Buṃ Budhāya Namaḥ', mantraTranslit:'Ом Бум Будха:йа Намаха' },
+  jupiter: { id:'jupiter', name:'Юпитер',  nameRu:'Гуру',   sym:'♃',  day:'Четверг',     dir:'Северо-Восток', color:'#C4A000', mantra:'ОМ ГУМ ГУРУВЕ НАМАХА',     mantraMeaning:'Приветствие Гуру — Юпитеру, планете мудрости и благодати',     lampOil:'Гхи',                     filler:['Пальмовый сахар','Тростниковый сахар','Гур','Куркума','Нутовая мука'],                              oils:['Гхи','Сандал','Лимон'],                 mats:['Жёлтый сапфир','Топаз','Нутовая мука','Куркума','Гур','Бананы','Жёлтые цветы'],                        doshas:['Брахма доша (Сатурн + Юпитер)','Чандала доша (Юпитер + Раху)','Юпитер нича'], days:9, mala:['Цитрин','Жёлтый сапфир'], mantraIAST:'Oṃ Guṃ Guruve Namaḥ', mantraTranslit:'Ом Гум Гуруве Намаха' },
+  venus:   { id:'venus',   name:'Венера',  nameRu:'Шукра',  sym:'♀',  day:'Пятница',     dir:'Юго-Восток',    color:'#C060A0', mantra:'ОМ ШУМ ШУКРАЕЙ НАМАХА',    mantraMeaning:'Приветствие Шукре — Венере, планете любви и красоты',          lampOil:'Кунжутное',               filler:['Морская соль'],                                                                                     oils:['Кунжутное','Роза','Жасмин','Иланг-иланг'],mats:['Алмаз','Белый сапфир','Белый рис','Сахар','Молоко','Роза','Жасмин','Белый шёлк'],                      doshas:['Венера нича','Венера в слабом положении'], days:9, mala:['Горный хрусталь','Розовый кварц'], mantraIAST:'Oṃ Śuṃ Śukrāya Namaḥ', mantraTranslit:'Ом Шум Шукра:йа Намаха' },
+  saturn:  { id:'saturn',  name:'Сатурн',  nameRu:'Шани',   sym:'♄',  day:'Суббота',     dir:'Запад',         color:'#5868C0', mantra:'ОМ ШАМ ШАНАЙЕ НАМАХА',     mantraMeaning:'Приветствие Шани — Сатурну, планете кармы и справедливости',   lampOil:'Горчичное или ореховое',  filler:['Каменная соль (особенно чёрная)'],                                                                  oils:['Кипарис','Ладан','Мирра','Эвкалипт','Сандал','Чёрный кунжут','Пачули','Горчичное'], mats:['Каменная соль','Камфора','Священный базилик','Аметист','Сапфир','Сталь','Железо','Уголь','Миндаль','Чёрный кунжут (семена)'], doshas:['Матри доша (Сатурн + Луна)','Питри доша (Сатурн + Солнце)','Брахма доша (Сатурн + Юпитер)','Пишача доша (Марс + Раху + Кету + Сатурн)'], days:11, mala:['Лазурит','Синий сапфир'], mantraIAST:'Oṃ Śaṃ Śanaye Namaḥ', mantraTranslit:'Ом Шам Шанайе Намаха' },
+  rahu:    { id:'rahu',    name:'Раху',    nameRu:'Раху',   sym:'☊',  day:'Суббота',     dir:'Юго-Запад',     color:'#8040A8', mantra:'ОМ РАМ РАХАВЭ НАМАХА',     mantraMeaning:'Приветствие Раху — северному лунному узлу, планете иллюзий',   lampOil:'Горчичное',               filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Кокос','Лаванда','Сандаловое дерево','Анис','Сладкий миндаль','Горчица','Ячмень','Сапфир','Цирконий','Апатит'], doshas:['Затмение (Раху + Солнце/Луна)','Чандала доша (Юпитер + Раху)','Каласарпа доша (все планеты между Раху и Кету)'], days:11, mala:['Гессонит (Гомед)'], mantraIAST:'Oṃ Raṃ Rāhave Namaḥ', mantraTranslit:'Ом Рам Ра:хаве Намаха' },
+  ketu:    { id:'ketu',    name:'Кету',    nameRu:'Кету',   sym:'☋',  day:'Четверг',     dir:'Северо-Восток', color:'#806040', mantra:'ОМ КЕЙМ КЕТАВЭ НАМАХА',    mantraMeaning:'Приветствие Кету — южному лунному узлу, планете мокши',       lampOil:'Горчичное',               filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Камфора','Ваниль','Сандаловое дерево','Сезам','Сладкий миндаль','Банан','Кошачий глаз'], doshas:['Затмение (Кету + Солнце/Луна)','Пишача доша (Кету + Марс)','Каласарпа доша (все планеты между Раху и Кету)'], days:11, mala:['Кошачий глаз'], mantraIAST:'Oṃ Keṃ Ketave Namaḥ', mantraTranslit:'Ом Кем Кетаве Намаха' },
 };
 
 const DOSHAS = [
@@ -694,7 +716,7 @@ function pickPlanet(id) {
     </div>`;
 }
 
-let sStep = 1, sPlanet = null, sTrayType = null, sMantraCount = 0, sCandleLit = false, sAsmStep = 0;
+let sStep = 1, sPlanet = null, sTrayType = null, sMantraCount = 0, sCandleLit = false, sAsmStep = 0, sAutoTimer = null;
 
 const STEPS = [
   {n:1,lbl:'Планета'},{n:2,lbl:'Поднос'},{n:3,lbl:'Ингредиенты'},
@@ -729,7 +751,7 @@ const ASM_STEPS = [
   Object.values(P).forEach(p => {
     const div = document.createElement('div');
     div.className = 'sim-p-opt'; div.dataset.pid = p.id;
-    div.innerHTML = `<span class="sim-p-sym">${p.sym}</span><div class="sim-p-name">${p.name}</div><div class="sim-p-day">${p.day}</div>`;
+    div.innerHTML = `<span class="sim-p-sym">${p.sym}</span><div class="sim-p-name">${p.name}</div><div class="sim-p-day">${p.day}</div><div class="sim-p-days">${p.days} дней</div>`;
     div.onclick = () => {
       document.querySelectorAll('.sim-p-opt').forEach(c => c.classList.remove('sel'));
       div.classList.add('sel'); sPlanet = p.id;
@@ -945,10 +967,17 @@ function lightIt() {
 
 function setupMantra() {
   sMantraCount = 0;
+  if (sAutoTimer) { clearInterval(sAutoTimer); sAutoTimer = null; }
+  const btn = document.getElementById('m-auto-btn');
+  if (btn) btn.textContent = '▶ Авто';
   if (sPlanet) {
     const p = P[sPlanet];
     document.getElementById('m-text').textContent = p.mantra;
+    document.getElementById('m-iast').textContent = p.mantraIAST || '';
+    document.getElementById('m-translit').textContent = p.mantraTranslit || '';
     document.getElementById('m-meaning').textContent = p.mantraMeaning;
+    const chips = document.getElementById('m-mala-chips');
+    chips.innerHTML = (p.mala || []).map(m => `<span class="chip" style="border-color:var(--acc-hi);color:var(--text)">${m}</span>`).join('');
   }
   updateMantraUI();
 }
@@ -959,7 +988,39 @@ function mCount() {
   updateMantraUI();
 }
 
-function mReset() { sMantraCount = 0; updateMantraUI(); }
+function mAuto() {
+  if (sAutoTimer) {
+    clearInterval(sAutoTimer);
+    sAutoTimer = null;
+    document.getElementById('m-auto-btn').textContent = '▶ Авто';
+    return;
+  }
+  if (sMantraCount >= 108) return;
+  document.getElementById('m-auto-btn').textContent = '⏹ Стоп';
+  sAutoTimer = setInterval(() => {
+    if (sMantraCount >= 108) {
+      clearInterval(sAutoTimer);
+      sAutoTimer = null;
+      document.getElementById('m-auto-btn').textContent = '▶ Авто';
+      return;
+    }
+    sMantraCount++;
+    updateMantraUI();
+  }, 1000);
+}
+
+function mFast() {
+  const add = Math.min(10, 108 - sMantraCount);
+  sMantraCount += add;
+  updateMantraUI();
+}
+
+function mReset() {
+  if (sAutoTimer) { clearInterval(sAutoTimer); sAutoTimer = null; }
+  const btn = document.getElementById('m-auto-btn');
+  if (btn) btn.textContent = '▶ Авто';
+  sMantraCount = 0; updateMantraUI();
+}
 
 function updateMantraUI() {
   document.getElementById('m-num').textContent = sMantraCount;
@@ -994,6 +1055,7 @@ function sDone() {
   document.getElementById('s-report').innerHTML = `
     <div class="s-report-title">📋 Отчёт о проведённой пудже</div>
     <div class="s-report-row"><span class="s-report-lbl">🌟 Планета</span><span class="s-report-val">${p.sym} ${p.name} — ${p.nameRu}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">📆 Курс</span><span class="s-report-val">${p.days} дней подряд · убывающая луна</span></div>
     <div class="s-report-row"><span class="s-report-lbl">📅 День</span><span class="s-report-val">${p.day}</span></div>
     <div class="s-report-row"><span class="s-report-lbl">🧭 Направление</span><span class="s-report-val">Лицом на ${p.dir}</span></div>
     <div class="s-report-row"><span class="s-report-lbl">🥘 Поднос</span><span class="s-report-val">${trayNames[sTrayType] || '—'}</span></div>
@@ -1005,6 +1067,7 @@ function sDone() {
 }
 
 function sRestart() {
+  if (sAutoTimer) { clearInterval(sAutoTimer); sAutoTimer = null; }
   sPlanet=null; sTrayType=null; sMantraCount=0; sCandleLit=false; sAsmStep=0; sStep=1;
   document.querySelectorAll('.sim-p-opt').forEach(c => c.classList.remove('sel'));
   document.querySelectorAll('.tray-opt').forEach(c => c.classList.remove('sel'));
