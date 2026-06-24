@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>АстроЧистка — Обучающее приложение</title>
+<style>
+  :root {
+    --gold: #d4a843;
+    --gold-light: #f0c96a;
+    --dark: #0d0d1a;
+    --dark2: #13132a;
+    --dark3: #1c1c38;
+    --text: #e8e0d0;
+    --text-dim: #9a90a0;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: linear-gradient(135deg, #0d0d1a 0%, #1a0a2e 50%, #0d0d1a 100%);
+    border-bottom: 1px solid rgba(212,168,67,0.3);
+    padding: 18px 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .app-title {
+    text-align: center;
+    font-size: 1.6rem;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(212,168,67,0.5);
+    margin-bottom: 14px;
+  }
+  .app-title span { color: var(--text-dim); font-size: 0.85rem; letter-spacing: 1px; display: block; margin-top: 2px; }
+
+  .nav-tabs {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+  }
+  .nav-tab {
+    padding: 9px 18px;
+    background: transparent;
+    border: none;
+    border-top: 2px solid transparent;
+    border-radius: 8px 8px 0 0;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--gold-light); }
+  .nav-tab.active {
+    color: var(--gold);
+    border-top-color: var(--gold);
+    background: rgba(212,168,67,0.08);
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 20px 16px 40px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* DOSHA SECTION */
+  .section-title {
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .section-subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .dosha-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+  }
+
+  .dosha-card {
+    background: var(--dark2);
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .dosha-card:hover, .dosha-card.selected {
+    border-color: var(--gold);
+    background: var(--dark3);
+    box-shadow: 0 0 18px rgba(212,168,67,0.15);
+    transform: translateY(-2px);
+  }
+
+  .dosha-name {
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    margin-bottom: 6px;
+  }
+  .dosha-planets-label { font-size: 0.8rem; color: var(--text-dim); margin-bottom: 4px; }
+  .dosha-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 10px; }
+  .dosha-planets-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .planet-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    border: 1px solid;
+  }
+
+  .dosha-result {
+    background: var(--dark2);
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: none;
+  }
+  .dosha-result.show { display: block; }
+  .dosha-result h3 { color: var(--gold); margin-bottom: 12px; font-size: 1.1rem; }
+  .result-planets-list { display: flex; flex-wrap: wrap; gap: 12px; }
+  .result-planet-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--dark3);
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+  }
+  .result-planet-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212,168,67,0.08);
+  }
+  .planet-symbol { font-size: 1.6rem; }
+  .planet-name-btn { font-size: 0.95rem; }
+  .planet-day-btn { font-size: 0.75rem; color: var(--text-dim); }
+
+  /* PLANETS SECTION */
+  .planet-select-row {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin-bottom: 24px;
+  }
+  .planet-select-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 10px 14px;
+    background: var(--dark2);
+    border: 2px solid rgba(212,168,67,0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    min-width: 80px;
+  }
+  .planet-select-btn:hover, .planet-select-btn.active {
+    border-color: var(--gold);
+    background: var(--dark3);
+  }
+  .planet-select-btn .sym { font-size: 1.8rem; }
+  .planet-select-btn .lbl { font-size: 0.75rem; color: var(--text-dim); }
+
+  .planet-detail {
+    background: var(--dark2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: none;
+  }
+  .planet-detail.show { display: block; }
+
+  .planet-header {
+    padding: 24px;
+    display: flex; align-items: center; gap: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .planet-header::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.03));
+    pointer-events: none;
+  }
+  .planet-big-symbol { font-size: 4rem; }
+  .planet-header-info { flex: 1; }
+  .planet-header-name { font-size: 2rem; font-weight: bold; letter-spacing: 2px; }
+  .planet-header-day { font-size: 0.95rem; margin-top: 4px; opacity: 0.8; }
+  .planet-header-dir { font-size: 0.85rem; opacity: 0.7; }
+  .planet-mantra-box {
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--gold-light);
+    margin-top: 10px;
+    border-radius: 0 6px 6px 0;
+  }
+  .mantra-label { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+
+  .planet-body {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .info-card {
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .info-card-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .info-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .info-item {
+    background: rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.82rem;
+    color: var(--text);
+  }
+
+  .dosha-info-card {
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    grid-column: 1 / -1;
+  }
+  .dosha-line { font-size: 0.84rem; color: var(--text-dim); line-height: 1.8; }
+  .dosha-highlight { color: #ff9977; }
+
+  .practice-btn-row { padding: 16px 20px; text-align: center; }
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold) 0%, #b8860b 100%);
+    color: #0d0d1a;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,67,0.4); }
+
+  /* SIMULATOR SECTION */
+  .sim-progress {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 4px;
+    margin-bottom: 24px;
+  }
+  .sim-step-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(212,168,67,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .sim-step-dot.done { background: rgba(212,168,67,0.3); border-color: var(--gold); color: var(--gold); }
+  .sim-step-dot.current { background: var(--gold); border-color: var(--gold); color: #0d0d1a; font-weight: bold; }
+
+  .sim-panel {
+    background: var(--dark2);
+    border-radius: var(--radius);
+    border: 1px solid rgba(212,168,67,0.2);
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .sim-step { display: none; flex-direction: column; }
+  .sim-step.active { display: flex; }
+
+  .sim-step-header {
+    background: linear-gradient(135deg, var(--dark3), rgba(212,168,67,0.05));
+    border-bottom: 1px solid rgba(212,168,67,0.15);
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sim-step-num {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    color: #0d0d1a;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .sim-step-title { font-size: 1.1rem; color: var(--gold-light); }
+  .sim-step-subtitle { font-size: 0.82rem; color: var(--text-dim); margin-top: 2px; }
+
+  .sim-step-body { padding: 20px; flex: 1; }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .option-card {
+    background: var(--dark3);
+    border: 2px solid rgba(212,168,67,0.2);
+    border-radius: 12px;
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .option-card:hover, .option-card.selected {
+    border-color: var(--gold);
+    background: rgba(212,168,67,0.08);
+    transform: translateY(-2px);
+  }
+  .option-card .opt-icon { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .option-card .opt-name { font-size: 0.9rem; color: var(--text); }
+  .option-card .opt-desc { font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; }
+
+  /* TRAY VISUAL */
+  .tray-container {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 20px;
+  }
+  .tray-visual {
+    width: 320px; height: 280px;
+    position: relative;
+    margin: 10px auto;
+  }
+  .tray-outer {
+    position: absolute;
+    width: 300px; height: 260px;
+    top: 10px; left: 10px;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    background: radial-gradient(ellipse, #1a1206 0%, #0d0d0d 100%);
+    overflow: hidden;
+  }
+  .tray-salt-layer {
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.5s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; color: rgba(255,255,255,0.6); text-align: center;
+  }
+  .tray-salt-layer.visible { opacity: 1; }
+
+  .tray-yantra {
+    position: absolute;
+    width: 120px; height: 120px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tray-yantra.visible { opacity: 1; }
+  .yantra-svg { width: 100%; height: 100%; }
+
+  .tray-candle {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 3;
+  }
+  .tray-candle.visible { opacity: 1; }
+
+  .tray-water-left {
+    position: absolute;
+    bottom: 30px; left: 20px;
+    font-size: 1.4rem;
+    opacity: 0; transition: opacity 0.5s;
+  }
+  .tray-water-right {
+    position: absolute;
+    bottom: 30px; right: 20px;
+    font-size: 1.4rem;
+    opacity: 0; transition: opacity 0.5s;
+  }
+  .tray-water-left.visible, .tray-water-right.visible { opacity: 1; }
+
+  .tray-names {
+    position: absolute;
+    top: 12px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6rem;
+    color: rgba(212,168,67,0.9);
+    opacity: 0; transition: opacity 0.5s;
+    white-space: nowrap;
+  }
+  .tray-names.visible { opacity: 1; }
+
+  .tray-ingredients {
+    position: absolute;
+    bottom: 8px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 4px;
+    font-size: 1.2rem;
+    opacity: 0; transition: opacity 0.5s;
+  }
+  .tray-ingredients.visible { opacity: 1; }
+
+  /* INGREDIENT CHECKLIST */
+  .ingredient-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .ingredient-item {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--dark3);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.85rem;
+  }
+  .ingredient-item:hover { border-color: rgba(212,168,67,0.4); }
+  .ingredient-item.checked {
+    background: rgba(100,180,100,0.1);
+    border-color: #5a9a5a;
+  }
+  .ingredient-check {
+    width: 20px; height: 20px;
+    border: 2px solid rgba(212,168,67,0.4);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+  }
+  .ingredient-item.checked .ingredient-check {
+    background: #5a9a5a;
+    border-color: #5a9a5a;
+    color: white;
+  }
+  .ingredient-name { flex: 1; }
+  .ing-type { font-size: 0.7rem; color: var(--text-dim); }
+
+  /* MANTRA COUNTER */
+  .mantra-container { text-align: center; padding: 10px; }
+  .mantra-text {
+    font-size: 1.3rem;
+    color: var(--gold);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .mantra-meaning { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 24px; }
+  .mantra-counter {
+    width: 120px; height: 120px;
+    border: 4px solid var(--gold);
+    border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: rgba(212,168,67,0.05);
+    user-select: none;
+  }
+  .mantra-counter:hover { background: rgba(212,168,67,0.1); transform: scale(1.05); }
+  .mantra-counter:active { transform: scale(0.97); }
+  .counter-num { font-size: 2.5rem; font-weight: bold; color: var(--gold); line-height: 1; }
+  .counter-label { font-size: 0.75rem; color: var(--text-dim); }
+  .mantra-progress {
+    width: 100%; max-width: 300px;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    margin: 0 auto 16px;
+    overflow: hidden;
+  }
+  .mantra-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+  .mantra-hint { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 16px; }
+
+  /* NAV BUTTONS */
+  .sim-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(212,168,67,0.1);
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid rgba(212,168,67,0.4);
+    color: var(--gold);
+    border-radius: 20px;
+    padding: 9px 22px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: rgba(212,168,67,0.1); }
+  .btn-outline:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .sim-current-planet {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-align: center;
+  }
+  .sim-current-planet strong { color: var(--gold); }
+
+  /* SUCCESS */
+  .success-panel {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .success-icon { font-size: 4rem; margin-bottom: 16px; }
+  .success-title { font-size: 1.4rem; color: var(--gold); margin-bottom: 8px; }
+  .success-text { color: var(--text-dim); line-height: 1.7; max-width: 400px; margin: 0 auto 24px; }
+
+  /* PLANET COLORS */
+  .planet-sun { --pc: #FFB830; }
+  .planet-moon { --pc: #A8C8E8; }
+  .planet-mars { --pc: #DC3030; }
+  .planet-mercury { --pc: #4CAF50; }
+  .planet-jupiter { --pc: #FFD700; }
+  .planet-venus { --pc: #FF80AB; }
+  .planet-saturn { --pc: #7986CB; }
+  .planet-rahu { --pc: #9C27B0; }
+  .planet-ketu { --pc: #795548; }
+
+  .planet-detail .planet-header { background: linear-gradient(135deg, color-mix(in srgb, var(--pc) 15%, var(--dark2)), var(--dark2)); }
+  .planet-detail .planet-header-name { color: var(--pc); }
+  .planet-detail .planet-header-day { color: color-mix(in srgb, var(--pc) 70%, white); }
+  .planet-badge { background: color-mix(in srgb, var(--pc, var(--gold)) 15%, transparent); border-color: var(--pc, var(--gold)); color: var(--pc, var(--gold)); }
+
+  .tip-box {
+    background: rgba(212,168,67,0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .tip-box strong { color: var(--gold-light); }
+
+  /* Instruction list */
+  .instruction-steps { list-style: none; padding: 0; }
+  .instruction-steps li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .instruction-steps li:last-child { border-bottom: none; }
+  .step-n {
+    width: 24px; height: 24px;
+    background: var(--gold);
+    color: #0d0d1a;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: bold;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  .candle-types {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px; margin-top: 12px;
+  }
+  .candle-type {
+    background: var(--dark3);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+  .candle-type .ct-title { color: var(--gold-light); font-size: 0.9rem; margin-bottom: 4px; }
+
+  @media (max-width: 600px) {
+    .app-title { font-size: 1.2rem; }
+    .nav-tab { padding: 8px 10px; font-size: 0.82rem; }
+    .planet-header { flex-direction: column; text-align: center; }
+    .tray-visual { width: 280px; height: 250px; }
+    .tray-outer { width: 260px; height: 230px; }
+    .planet-big-symbol { font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-title">
+    ✦ АстроЧистка ✦
+    <span>Обучающий симулятор мастер-класса</span>
+  </div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('doshas')">🔯 Доши</button>
+    <button class="nav-tab" onclick="showSection('planets')">🪐 Планеты</button>
+    <button class="nav-tab" onclick="showSection('simulator')">✨ Симулятор</button>
+  </nav>
+</div>
+
+<!-- ===================== DOSHAS SECTION ===================== -->
+<div class="section active" id="section-doshas">
+  <div class="section-title">Определите свою дошу</div>
+  <div class="section-subtitle">
+    Выберите дошу из вашей натальной карты, чтобы узнать, какие планеты нужно чистить.<br>
+    Одна доша может требовать очищения нескольких планет.
+  </div>
+
+  <div class="dosha-grid" id="dosha-grid"></div>
+
+  <div class="dosha-result" id="dosha-result">
+    <h3 id="dosha-result-title"></h3>
+    <p id="dosha-result-desc" style="color:var(--text-dim);font-size:0.87rem;margin-bottom:14px;line-height:1.6"></p>
+    <div class="dosha-planets-label">Планеты для очищения:</div>
+    <div class="result-planets-list" id="result-planets-list"></div>
+    <div style="margin-top:16px;font-size:0.82rem;color:var(--text-dim)">
+      Нажмите на планету, чтобы узнать подробности → перейти к <strong style="color:var(--gold)">симулятору</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PLANETS SECTION ===================== -->
+<div class="section" id="section-planets">
+  <div class="section-title">Энциклопедия планет</div>
+  <div class="section-subtitle">Выберите планету для просмотра информации</div>
+
+  <div class="planet-select-row" id="planet-select-row"></div>
+  <div id="planet-detail-container"></div>
+</div>
+
+<!-- ===================== SIMULATOR SECTION ===================== -->
+<div class="section" id="section-simulator">
+  <div class="section-title">Симулятор астрочистки</div>
+  <div class="section-subtitle">
+    Пошаговая практика. Следуйте инструкциям, чтобы освоить порядок проведения ритуала.
+  </div>
+
+  <div class="sim-progress" id="sim-progress"></div>
+
+  <div class="sim-panel">
+    <!-- Step 1: Choose Planet -->
+    <div class="sim-step active" id="sim-step-1">
+      <div class="sim-step-header">
+        <div class="sim-step-num">1</div>
+        <div>
+          <div class="sim-step-title">Выбор планеты и дня</div>
+          <div class="sim-step-subtitle">Какую планету будем чистить сегодня?</div>
+        </div>
+      </div>
+      <div class="sim-step-body">
+        <div class="tip-box">
+          <strong>Важно:</strong> каждая планета имеет свой день недели. Чистку проводят в соответствующий день.
+          Если день не подходит — можно провести чистку за 1-2 дня до нужного дня.
+        </div>
+        <div class="options-grid" id="sim-planet-options"></div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-outline" disabled>← Назад</button>
+        <div class="sim-current-planet" id="sim-planet-label">Выберите планету</div>
+        <button class="btn-gold" onclick="simNext()" id="btn-step1-next" disabled>Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Choose Tray -->
+    <div class="sim-step" id="sim-step-2">
+      <div class="sim-step-header">
+        <div class="sim-step-num">2</div>
+        <div>
+          <div class="sim-step-title">Выбор подноса</div>
+          <div class="sim-step-subtitle">Поднос — рабочая поверхность для ритуала</div>
+        </div>
+      </div>
+      <div class="sim-step-body">
+        <div class="tip-box">
+          Поднос должен быть чистым. Форма — преимущественно круглая или овальная.
+          Можно использовать металлический, деревянный или керамический поднос.
+        </div>
+        <div class="options-grid">
+          <div class="option-card" onclick="selectTray(this,'metal')" id="tray-metal">
+            <span class="opt-icon">🥘</span>
+            <div class="opt-name">Металлический</div>
+            <div class="opt-desc">Универсальный, хорошо проводит энергию</div>
+          </div>
+          <div class="option-card" onclick="selectTray(this,'wood')" id="tray-wood">
+            <span class="opt-icon">🪵</span>
+            <div class="opt-name">Деревянный</div>
+            <div class="opt-desc">Подходит для Юпитера, Солнца, Меркурия</div>
+          </div>
+          <div class="option-card" onclick="selectTray(this,'ceramic')" id="tray-ceramic">
+            <span class="opt-icon">⬜</span>
+            <div class="opt-name">Керамический</div>
+            <div class="opt-desc">Белый — подходит для Луны и Венеры</div>
+          </div>
+        </div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-outline" onclick="simBack()">← Назад</button>
+        <div class="sim-current-planet" id="sim-planet-label-2"></div>
+        <button class="btn-gold" onclick="simNext()" id="btn-step2-next" disabled>Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Choose Ingredients -->
+    <div class="sim-step" id="sim-step-3">
+      <div class="sim-step-header">
+        <div class="sim-step-num">3</div>
+        <div>
+          <div class="sim-step-title">Выбор ингредиентов</div>
+          <div class="sim-step-subtitle">Отметьте ингредиенты, которые у вас есть</div>
+        </div>
+      </div>
+      <div class="sim-step-body">
+        <div class="tip-box" id="ing-salt-tip">
+          <strong>Наполнитель (соль/сахар)</strong> — обязательный базовый ингредиент, насыпается первым.
+          Остальные ингредиенты можно выбирать частично — не обязательно иметь всё.
+        </div>
+        <div class="ingredient-list" id="ingredient-list"></div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-outline" onclick="simBack()">← Назад</button>
+        <div class="sim-current-planet" id="sim-planet-label-3"></div>
+        <button class="btn-gold" onclick="simNext()">Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Place on Tray -->
+    <div class="sim-step" id="sim-step-4">
+      <div class="sim-step-header">
+        <div class="sim-step-num">4</div>
+        <div>
+          <div class="sim-step-title">Расстановка на подносе</div>
+          <div class="sim-step-subtitle">Последовательно собираем ритуальный поднос</div>
+        </div>
+      </div>
+      <div class="sim-step-body">
+        <div class="tray-container">
+          <div class="tray-visual">
+            <div class="tray-outer" id="tray-outer">
+              <div class="tray-salt-layer" id="tray-salt"></div>
+              <div class="tray-yantra" id="tray-yantra">
+                <svg class="yantra-svg" viewBox="0 0 100 100" id="yantra-svg">
+                  <rect x="10" y="10" width="80" height="80" fill="none" stroke="rgba(212,168,67,0.6)" stroke-width="1.5"/>
+                  <polygon points="50,15 85,75 15,75" fill="none" stroke="rgba(212,168,67,0.8)" stroke-width="1.5"/>
+                  <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(212,168,67,0.5)" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="tray-names" id="tray-names">Имя1 • Имя2 • Имя3</div>
+              <div class="tray-candle" id="tray-candle">🕯️</div>
+              <div class="tray-water-left" id="tray-water-l">💧</div>
+              <div class="tray-water-right" id="tray-water-r">💧</div>
+              <div class="tray-ingredients" id="tray-ings"></div>
+            </div>
+          </div>
+
+          <ul class="instruction-steps" id="tray-steps-list"></ul>
+        </div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-outline" onclick="simBack()">← Назад</button>
+        <div class="sim-current-planet" id="sim-planet-label-4"></div>
+        <button class="btn-gold" onclick="simNext()" id="btn-step4-next">Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Light Candle -->
+    <div class="sim-step" id="sim-step-5">
+      <div class="sim-step-header">
+        <div class="sim-step-num">5</div>
+        <div>
+          <div class="sim-step-title">Зажигаем свечу или лампадку</div>
+          <div class="sim-step-subtitle">Огонь активирует ритуальное пространство</div>
+        </div>
+      </div>
+      <div class="sim-step-body">
+        <div class="tip-box" id="candle-tip">
+          Зажигаем свечу или лампадку с маслом, соответствующим выбранной планете.
+          Свечи должны быть <strong>без программ</strong> (не церковные, без надписей).
+        </div>
+        <div class="candle-types">
+          <div class="candle-type">
+            <div class="ct-title">🕯️ Восковые или парафиновые</div>
+            Цветные, ароматизированные. Самодельные с наполнителями планеты. Цвет соответствует планете.
+          </div>
+          <div class="candle-type">
+            <div class="ct-title">🪔 Лампадка с маслом</div>
+            <span id="lamp-oil-text">Масло по планете</span>. Огонь горит дольше — подходит для длинного чтения мантр.
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:24px;">
+          <button class="btn-gold" onclick="lightCandle()" id="light-btn" style="font-size:1.2rem;padding:14px 40px;">
+            🔥 Зажечь свечу
+          </button>
+          <div id="candle-lit-msg" style="display:none;margin-top:16px;color:#FFB830;font-size:1.1rem;">
+            🕯️ Свеча зажжена! Пространство активировано.
+          </div>
+        </div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-outline" onclick="simBack()">← Назад</button>
+        <div class="sim-current-planet" id="sim-planet-label-5"></div>
+        <button class="btn-gold" onclick="simNext()" id="btn-step5-next" disabled>Далее →</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Mantra -->
+    <div class="sim-step" id="sim-step-6">
+      <div class="sim-step-header">
+        <div class="sim-step-num">6</div>
+        <div>
+          <div class="sim-step-title">Чтение мантры</div>
+          <div class="sim-step-subtitle">108 повторений — полный цикл очищения</div>
+        </div>
+      </div>
+      <div class="sim-step-body">
+        <div class="mantra-container">
+          <div class="mantra-text" id="mantra-display"></div>
+          <div class="mantra-meaning" id="mantra-meaning"></div>
+          <div class="mantra-hint">Нажмите на круг для каждого повторения мантры</div>
+          <div class="mantra-counter" onclick="countMantra()" id="mantra-counter">
+            <div class="counter-num" id="counter-num">0</div>
+            <div class="counter-label">из 108</div>
+          </div>
+          <div class="mantra-progress"><div class="mantra-progress-fill" id="mantra-fill" style="width:0%"></div></div>
+          <div id="mantra-status" style="color:var(--text-dim);font-size:0.85rem;min-height:24px"></div>
+          <button class="btn-outline" onclick="resetMantra()" style="margin-top:12px;font-size:0.8rem;padding:6px 16px;">Сбросить</button>
+        </div>
+      </div>
+      <div class="sim-nav">
+        <button class="btn-outline" onclick="simBack()">← Назад</button>
+        <div class="sim-current-planet" id="sim-planet-label-6"></div>
+        <button class="btn-gold" onclick="simComplete()" id="btn-step6-next" disabled>Завершить ✓</button>
+      </div>
+    </div>
+
+    <!-- Step 7: Complete -->
+    <div class="sim-step" id="sim-step-7">
+      <div class="sim-step-body">
+        <div class="success-panel">
+          <div class="success-icon">🌟</div>
+          <div class="success-title">Астрочистка завершена!</div>
+          <div class="success-text" id="success-text"></div>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <button class="btn-gold" onclick="simRestart()">Начать новую чистку</button>
+            <button class="btn-outline" onclick="showSection('planets')">Изучить планеты</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const PLANETS = {
+  sun: {
+    id: 'sun', name: 'Солнце', nameEn: 'Surya',
+    symbol: '☀️', day: 'Воскресенье', dayShort: 'ВС',
+    direction: 'Восток', color: '#FFB830',
+    mantra: 'Ом Сум Сурьяей намах',
+    mantraFull: 'ОМ СУМ СУРЬЯЕЙ НАМАХА',
+    mantraMeaning: 'Приветствие Сурье — богу Солнца, дарующему жизнь и силу',
+    filler: ['Пальмовый сахар', 'Гур', 'Пшеничная мука'],
+    lampOil: 'Подсолнечное или гхи',
+    candleColor: 'Золотая, оранжевая, жёлтая',
+    oils: ['Жасминовое', 'Сандал', 'Апельсин', 'Корица'],
+    materials: ['Медь', 'Золото', 'Рубин', 'Пшеница', 'Мёд', 'Куркума', 'Жёлтый цветок', 'Лотос'],
+    doshas: ['Питри доша (Сатурн+Солнце)', 'Аспект Раху/Кету на Солнце — ½ эффекта'],
+    trayEmoji: '🟡',
+    yantras: 'Круг',
+  },
+  moon: {
+    id: 'moon', name: 'Луна', nameEn: 'Chandra',
+    symbol: '🌙', day: 'Понедельник', dayShort: 'ПН',
+    direction: 'Северо-Запад', color: '#A8C8E8',
+    mantra: 'Ом Чам Чандраей намах',
+    mantraFull: 'ОМ ЧАМ ЧАНДРАЕЙ НАМАХА',
+    mantraMeaning: 'Приветствие Чандре — богу Луны, управляющему умом и эмоциями',
+    filler: ['Морская соль'],
+    lampOil: 'Кокосовое или кунжутное',
+    candleColor: 'Белая, серебристая, голубая',
+    oils: ['Кокосовое', 'Жасминовое', 'Роза', 'Лотос'],
+    materials: ['Жемчуг', 'Лунный камень', 'Белый рис', 'Молоко', 'Кокос', 'Белый цветок', 'Серебро'],
+    doshas: ['Матри доша (Сатурн+Луна)', 'Аспект Раху/Кету на Луну — ½ эффекта'],
+    trayEmoji: '🔵',
+  },
+  mars: {
+    id: 'mars', name: 'Марс', nameEn: 'Mangala',
+    symbol: '♂️', day: 'Вторник', dayShort: 'ВТ',
+    direction: 'Юг', color: '#DC3030',
+    mantra: 'Ом манг Мангалайе намах',
+    mantraFull: 'ОМ МАНГ МАНГАЛАЙЕ НАМАХА',
+    mantraMeaning: 'Приветствие Мангале — Марсу, планете силы, воли и действия',
+    filler: ['Каменная розовая соль', 'Соль мёртвого моря'],
+    lampOil: 'Жасминовое или гхи',
+    candleColor: 'Красная, алая',
+    oils: ['Жасминовое', 'Сладкий миндаль', 'Ладан', 'Сандал', 'Корица', 'Гвоздика'],
+    materials: ['Красный коралл', 'Рубин (не яркий)', 'Мёд', 'Сахар', 'Каменная розовая соль', 'Фенхель', 'Куркума', 'Чили', 'Чёрный перец', 'Имбирь', 'Корица', 'Гвоздика', 'Ладан', 'Камфора', 'Соль мёртвого моря', 'Сандаловое дерево', 'Гранат', 'Масур дал'],
+    doshas: ['Куджа доша: Марс в 1,2,4,7,8,12 доме', 'Пишача доша: Марс+Раху+Кету+Сатурн', 'Марс нича (в слабом знаке)'],
+    trayEmoji: '🔴',
+  },
+  mercury: {
+    id: 'mercury', name: 'Меркурий', nameEn: 'Budha',
+    symbol: '☿', day: 'Среда', dayShort: 'СР',
+    direction: 'Север', color: '#4CAF50',
+    mantra: 'Ом бум Буддхаей намах',
+    mantraFull: 'ОМ БУМ БУДДХАЕЙ НАМАХА',
+    mantraMeaning: 'Приветствие Будхе — Меркурию, планете интеллекта и коммуникации',
+    filler: ['Соль (любая)', 'Сахар (любой)'],
+    lampOil: 'Кунжутное',
+    candleColor: 'Зелёная, бирюзовая',
+    oils: ['Кунжутное', 'Мята', 'Эвкалипт', 'Лимон'],
+    materials: ['Изумруд', 'Нефрит', 'Маш-дал (зелёная чечевица)', 'Мята', 'Эвкалипт', 'Зелёный кардамон', 'Фенхель'],
+    doshas: ['Меркурий нича или слабый', 'Меркурий ретроградный'],
+    trayEmoji: '🟢',
+  },
+  jupiter: {
+    id: 'jupiter', name: 'Юпитер', nameEn: 'Guru',
+    symbol: '♃', day: 'Четверг', dayShort: 'ЧТ',
+    direction: 'Северо-Восток', color: '#FFD700',
+    mantra: 'Ом гум Гуруве намах',
+    mantraFull: 'ОМ ГУМ ГУРУВЕ НАМАХА',
+    mantraMeaning: 'Приветствие Гуру — Юпитеру, планете мудрости и благодати',
+    filler: ['Пальмовый сахар', 'Тростниковый сахар', 'Гур', 'Куркума', 'Нутовая мука'],
+    lampOil: 'Гхи',
+    candleColor: 'Жёлтая, золотая',
+    oils: ['Гхи', 'Сандал', 'Лимон', 'Кедр'],
+    materials: ['Жёлтый сапфир', 'Топаз', 'Нутовая мука', 'Куркума', 'Гур', 'Бананы', 'Жёлтые цветы', 'Шелковица'],
+    doshas: ['Брахма доша (Сатурн+Юпитер)', 'Чандала доша (Юпитер+Раху)', 'Юпитер нича'],
+    trayEmoji: '🟡',
+  },
+  venus: {
+    id: 'venus', name: 'Венера', nameEn: 'Shukra',
+    symbol: '♀', day: 'Пятница', dayShort: 'ПТ',
+    direction: 'Юго-Восток', color: '#FF80AB',
+    mantra: 'Ом шум Шукраей намах',
+    mantraFull: 'ОМ ШУМ ШУКРАЕЙ НАМАХА',
+    mantraMeaning: 'Приветствие Шукре — Венере, планете любви, красоты и изобилия',
+    filler: ['Морская соль'],
+    lampOil: 'Кунжутное',
+    candleColor: 'Розовая, белая',
+    oils: ['Кунжутное', 'Роза', 'Жасмин', 'Сандал', 'Иланг-иланг'],
+    materials: ['Алмаз', 'Белый сапфир', 'Белый рис', 'Сахар', 'Молоко', 'Роза', 'Жасмин', 'Белый шёлк'],
+    doshas: ['Венера нича', 'Венера в слабом положении'],
+    trayEmoji: '🩷',
+  },
+  saturn: {
+    id: 'saturn', name: 'Сатурн', nameEn: 'Shani',
+    symbol: '♄', day: 'Суббота', dayShort: 'СБ',
+    direction: 'Запад', color: '#7986CB',
+    mantra: 'Ом Шам Шанайе намах',
+    mantraFull: 'ОМ ШАМ ШАНАЙЕ НАМАХА',
+    mantraMeaning: 'Приветствие Шани — Сатурну, планете кармы и справедливости',
+    filler: ['Каменная соль (особенно чёрная)'],
+    lampOil: 'Горчичное или ореховое',
+    candleColor: 'Чёрная, тёмно-синяя, фиолетовая',
+    oils: ['Сладкий миндаль', 'Кипарис', 'Ладан', 'Мирра', 'Эвкалипт', 'Сандал', 'Чёрный кунжут', 'Пачули', 'Горчичное'],
+    materials: ['Каменная соль', 'Камфора', 'Священный базилик', 'Аметист', 'Сапфир', 'Сталь', 'Железо', 'Кожа', 'Уголь', 'Миндаль', 'Чёрный кунжут (семена)'],
+    doshas: ['Матри доша (Сатурн+Луна)', 'Питри доша (Сатурн+Солнце)', 'Брахма доша (Сатурн+Юпитер)', 'Пишача доша (Марс+Раху+Кету+Сатурн)'],
+    trayEmoji: '🟣',
+  },
+  rahu: {
+    id: 'rahu', name: 'Раху', nameEn: 'Rahu',
+    symbol: '☊', day: 'Суббота', dayShort: 'СБ',
+    direction: 'Юго-Запад', color: '#9C27B0',
+    mantra: 'Ом Рам Рахавэ намах',
+    mantraFull: 'ОМ РАМ РАХАВЭ НАМАХА',
+    mantraMeaning: 'Приветствие Раху — северному лунному узлу, планете иллюзий',
+    filler: ['Каменная соль'],
+    lampOil: 'Горчичное',
+    candleColor: 'Тёмно-синяя, дымчатая',
+    oils: ['Горчичное'],
+    materials: ['Каменная соль', 'Ладан', 'Мирра', 'Лимон', 'Кокос', 'Лаванда', 'Сандаловое дерево', 'Анис', 'Сладкий миндаль', 'Горчица', 'Ячмень', 'Сапфир', 'Цирконий', 'Апатит'],
+    doshas: ['Затмение (Раху+Солнце или Луна)', 'Чандала доша (Юпитер+Раху)', 'Каласарпа доша (все планеты меж Раху-Кету)', '½ эффекта — аспекты Раху на Солнце/Луну'],
+    trayEmoji: '🟤',
+  },
+  ketu: {
+    id: 'ketu', name: 'Кету', nameEn: 'Ketu',
+    symbol: '☋', day: 'Четверг/Суббота', dayShort: 'ЧТ',
+    direction: 'Северо-Восток (вверх)', color: '#795548',
+    mantra: 'Ом кем Кетаве намах',
+    mantraFull: 'ОМ КЕЙМ КЕТАВЭ НАМАХА',
+    mantraMeaning: 'Приветствие Кету — южному лунному узлу, планете мокши',
+    filler: ['Каменная соль'],
+    lampOil: 'Горчичное',
+    candleColor: 'Серая, чёрно-белая',
+    oils: ['Горчичное'],
+    materials: ['Каменная соль', 'Ладан', 'Мирра', 'Лимон', 'Камфора', 'Ваниль', 'Сандаловое дерево', 'Сезам', 'Сладкий миндаль', 'Банан', 'Кошачий глаз', 'Лаксунья', 'Черно-белый камень'],
+    doshas: ['Затмение (Кету+Солнце или Луна)', 'Пишача доша (Кету+Марс)', 'Каласарпа доша (все планеты меж Раху-Кету)', '½ эффекта — аспекты Кету на Солнце/Луну'],
+    trayEmoji: '⚫',
+  }
+};
+
+const DOSHAS = [
+  {
+    id: 'matri', name: 'Матри доша', emoji: '🌙',
+    desc: 'Нарушение в материнской линии. Возникает при соединении Сатурна и Луны в карте. Проявляется в сложностях с матерью, здоровьем, эмоциональной сферой.',
+    planets: ['saturn', 'moon'],
+    cause: 'Сатурн + Луна в соединении'
+  },
+  {
+    id: 'pitri', name: 'Питри доша', emoji: '☀️',
+    desc: 'Нарушение в отцовской (предковой) линии. Соединение Сатурна с Солнцем. Влияет на карьеру, авторитет, отношения с отцом.',
+    planets: ['saturn', 'sun'],
+    cause: 'Сатурн + Солнце в соединении'
+  },
+  {
+    id: 'brahma', name: 'Брахма доша', emoji: '♃',
+    desc: 'Ослабление мудрости и духовного роста. Соединение Сатурна с Юпитером. Влияет на обучение, духовность, учителей.',
+    planets: ['saturn', 'jupiter'],
+    cause: 'Сатурн + Юпитер в соединении'
+  },
+  {
+    id: 'kuja', name: 'Куджа доша', emoji: '♂️',
+    desc: 'Мангал доша — Марс в 1, 2, 4, 7, 8 или 12 доме. Влияет на партнёрство, брак, конфликты и здоровье.',
+    planets: ['mars'],
+    cause: 'Марс в 1, 2, 4, 7, 8 или 12 доме'
+  },
+  {
+    id: 'pishaca', name: 'Пишача доша', emoji: '🔺',
+    desc: 'Очень сильное искажение. Марс соединён с Раху или Кету, иногда с Сатурном. Требует очищения нескольких планет.',
+    planets: ['mars', 'rahu', 'ketu', 'saturn'],
+    cause: 'Марс + Раху + Кету (+ иногда Сатурн)'
+  },
+  {
+    id: 'chandala', name: 'Чандала доша', emoji: '🌀',
+    desc: 'Юпитер под влиянием Раху — мудрость замутнена. Нарушает духовный рост, отношения с учителями.',
+    planets: ['jupiter', 'rahu'],
+    cause: 'Юпитер + Раху в соединении'
+  },
+  {
+    id: 'kalasarpa', name: 'Каласарпа доша', emoji: '🐍',
+    desc: 'Все планеты расположены между Раху и Кету. Требует очищения всех планет. Сильное кармическое ограничение.',
+    planets: ['rahu', 'ketu', 'sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'],
+    cause: 'Все планеты между Раху и Кету'
+  },
+  {
+    id: 'grahan', name: 'Доша затмения', emoji: '🌑',
+    desc: 'Раху или Кету в соединении с Солнцем или Луной. Вызывает затмения сознания, здоровья или жизненной силы.',
+    planets: ['rahu', 'ketu', 'sun', 'moon'],
+    cause: 'Раху/Кету + Солнце/Луна'
+  }
+];
+
+// ===================== STATE =====================
+let currentPlanetId = null;
+let simCurrentStep = 1;
+let simSelectedPlanet = null;
+let simSelectedTray = null;
+let mantaCount = 0;
+let candleLit = false;
+
+// ===================== SECTION NAV =====================
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  const tabs = {'doshas':0,'planets':1,'simulator':2};
+  document.querySelectorAll('.nav-tab')[tabs[id]].classList.add('active');
+}
+
+// ===================== DOSHAS =====================
+function initDoshas() {
+  const grid = document.getElementById('dosha-grid');
+  DOSHAS.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'dosha-card';
+    card.innerHTML = `
+      <div class="dosha-name">${d.emoji} ${d.name}</div>
+      <div class="dosha-desc">${d.desc}</div>
+      <div class="dosha-planets-label">Причина: <em style="color:var(--text)">${d.cause}</em></div>
+      <div style="margin-top:8px" class="dosha-planets-badges">
+        ${d.planets.map(pid => `<span class="planet-badge" style="background:${PLANETS[pid].color}22;border-color:${PLANETS[pid].color};color:${PLANETS[pid].color}">${PLANETS[pid].symbol} ${PLANETS[pid].name}</span>`).join('')}
+      </div>`;
+    card.onclick = () => selectDosha(d, card);
+    grid.appendChild(card);
+  });
+}
+
+function selectDosha(d, card) {
+  document.querySelectorAll('.dosha-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+
+  const result = document.getElementById('dosha-result');
+  result.classList.add('show');
+  document.getElementById('dosha-result-title').textContent = `${d.emoji} ${d.name} — планеты для очищения`;
+  document.getElementById('dosha-result-desc').textContent = d.desc;
+
+  const list = document.getElementById('result-planets-list');
+  list.innerHTML = '';
+  d.planets.forEach(pid => {
+    const p = PLANETS[pid];
+    const btn = document.createElement('button');
+    btn.className = 'result-planet-btn';
+    btn.innerHTML = `<span class="planet-symbol">${p.symbol}</span><div><div class="planet-name-btn">${p.name}</div><div class="planet-day-btn">${p.day}</div></div>`;
+    btn.onclick = () => {
+      showSection('planets');
+      selectPlanet(pid);
+    };
+    list.appendChild(btn);
+  });
+
+  result.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+// ===================== PLANETS =====================
+function initPlanetSelect() {
+  const row = document.getElementById('planet-select-row');
+  Object.values(PLANETS).forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = `planet-select-btn planet-${p.id}`;
+    btn.dataset.planet = p.id;
+    btn.innerHTML = `<span class="sym">${p.symbol}</span><span class="lbl">${p.name}</span>`;
+    btn.onclick = () => selectPlanet(p.id);
+    row.appendChild(btn);
+  });
+}
+
+function selectPlanet(id) {
+  currentPlanetId = id;
+  document.querySelectorAll('.planet-select-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.planet === id);
+  });
+
+  const p = PLANETS[id];
+  const container = document.getElementById('planet-detail-container');
+  container.innerHTML = `
+    <div class="planet-detail planet-${id} show">
+      <div class="planet-header">
+        <div class="planet-big-symbol">${p.symbol}</div>
+        <div class="planet-header-info">
+          <div class="planet-header-name">${p.name} <span style="font-size:1rem;opacity:0.7">(${p.nameEn})</span></div>
+          <div class="planet-header-day">📅 ${p.day} · 🧭 ${p.direction}</div>
+          <div class="planet-mantra-box">
+            <div class="mantra-label">Мантра</div>
+            ${p.mantraFull}
+          </div>
+        </div>
+      </div>
+      <div class="planet-body">
+        <div class="info-card">
+          <div class="info-card-title">🧂 Наполнитель (база)</div>
+          <div class="info-items">${p.filler.map(f=>`<span class="info-item">${f}</span>`).join('')}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">🪔 Масло для лампадки</div>
+          <div class="info-items"><span class="info-item">${p.lampOil}</span></div>
+          <div style="margin-top:8px;font-size:0.8rem;color:var(--text-dim)">Цвет свечи: ${p.candleColor}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">🌿 Масла эфирные</div>
+          <div class="info-items">${p.oils.map(o=>`<span class="info-item">${o}</span>`).join('')}</div>
+        </div>
+        <div class="info-card" style="grid-column:1/-1">
+          <div class="info-card-title">💎 Материалы, минералы, вещества</div>
+          <div class="info-items">${p.materials.map(m=>`<span class="info-item">${m}</span>`).join('')}</div>
+        </div>
+        <div class="dosha-info-card">
+          <div class="info-card-title">⚠️ Доши, связанные с планетой</div>
+          <div class="dosha-line">${p.doshas.map(d=>`• <span class="dosha-highlight">${d}</span>`).join('<br>')}</div>
+        </div>
+      </div>
+      <div class="practice-btn-row">
+        <button class="btn-gold" onclick="startSimWithPlanet('${id}')">▶ Практиковать чистку ${p.name}</button>
+      </div>
+    </div>`;
+}
+
+function startSimWithPlanet(id) {
+  simSelectedPlanet = id;
+  simCurrentStep = 2;
+  showSection('simulator');
+  updateSimDisplay();
+  document.getElementById('btn-step1-next').disabled = false;
+  document.getElementById('sim-planet-label').innerHTML = `<strong style="color:var(--gold)">${PLANETS[id].symbol} ${PLANETS[id].name}</strong>`;
+  // Activate step 1 planet option
+  document.querySelectorAll('#sim-planet-options .option-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.planet === id);
+  });
+}
+
+// ===================== SIMULATOR =====================
+const SIM_STEPS = [
+  {num:1, label:'Планета'},
+  {num:2, label:'Поднос'},
+  {num:3, label:'Ингредиенты'},
+  {num:4, label:'Поднос'},
+  {num:5, label:'Свеча'},
+  {num:6, label:'Мантра'},
+  {num:7, label:'Готово'},
+];
+
+function initSimProgress() {
+  const prog = document.getElementById('sim-progress');
+  SIM_STEPS.forEach(s => {
+    const dot = document.createElement('div');
+    dot.className = 'sim-step-dot';
+    dot.id = `dot-${s.num}`;
+    dot.textContent = s.num < 7 ? s.num : '✓';
+    dot.title = s.label;
+    prog.appendChild(dot);
+  });
+}
+
+function initSimPlanetOptions() {
+  const grid = document.getElementById('sim-planet-options');
+  Object.values(PLANETS).forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'option-card';
+    card.dataset.planet = p.id;
+    card.innerHTML = `<span class="opt-icon">${p.symbol}</span><div class="opt-name">${p.name}</div><div class="opt-desc">${p.day}</div>`;
+    card.onclick = () => {
+      document.querySelectorAll('#sim-planet-options .option-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      simSelectedPlanet = p.id;
+      document.getElementById('btn-step1-next').disabled = false;
+      const lbl = document.getElementById('sim-planet-label');
+      if(lbl) lbl.innerHTML = `<strong style="color:var(--gold)">${p.symbol} ${p.name}</strong>`;
+    };
+    grid.appendChild(card);
+  });
+}
+
+function updateSimDisplay() {
+  // Update dots
+  for(let i=1; i<=7; i++) {
+    const dot = document.getElementById(`dot-${i}`);
+    if(!dot) continue;
+    dot.classList.remove('done','current');
+    if(i < simCurrentStep) dot.classList.add('done');
+    else if(i === simCurrentStep) dot.classList.add('current');
+  }
+  // Show step
+  document.querySelectorAll('.sim-step').forEach((s,idx) => {
+    s.classList.toggle('active', idx+1 === simCurrentStep);
+  });
+  // Update planet labels
+  if(simSelectedPlanet) {
+    const p = PLANETS[simSelectedPlanet];
+    const html = `<strong>${p.symbol} ${p.name}</strong>`;
+    [2,3,4,5,6].forEach(n => {
+      const el = document.getElementById(`sim-planet-label-${n}`);
+      if(el) el.innerHTML = html;
+    });
+  }
+  // Step-specific setup
+  if(simCurrentStep === 3) setupIngredients();
+  if(simCurrentStep === 4) setupTraySteps();
+  if(simCurrentStep === 5) {
+    candleLit = false;
+    document.getElementById('light-btn').style.display = '';
+    document.getElementById('candle-lit-msg').style.display = 'none';
+    document.getElementById('btn-step5-next').disabled = true;
+    if(simSelectedPlanet) {
+      document.getElementById('lamp-oil-text').textContent = PLANETS[simSelectedPlanet].lampOil;
+    }
+  }
+  if(simCurrentStep === 6) setupMantra();
+}
+
+function simNext() {
+  if(simCurrentStep < 7) {
+    simCurrentStep++;
+    updateSimDisplay();
+  }
+}
+function simBack() {
+  if(simCurrentStep > 1) {
+    simCurrentStep--;
+    updateSimDisplay();
+  }
+}
+
+function selectTray(el, type) {
+  document.querySelectorAll('#sim-step-2 .option-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  simSelectedTray = type;
+  document.getElementById('btn-step2-next').disabled = false;
+}
+
+function setupIngredients() {
+  if(!simSelectedPlanet) return;
+  const p = PLANETS[simSelectedPlanet];
+  const list = document.getElementById('ingredient-list');
+  list.innerHTML = '';
+  document.getElementById('ing-salt-tip').innerHTML = `<strong>Наполнитель для ${p.name}:</strong> ${p.filler.join(', ')} — насыпается первым, создаёт основу. Затем добавляются дополнительные ингредиенты.`;
+
+  const allItems = [
+    ...p.filler.map(f=>({name:f, type:'Наполнитель'})),
+    ...p.materials.map(m=>({name:m, type:'Материал'}))
+  ];
+
+  allItems.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'ingredient-item';
+    div.innerHTML = `<div class="ingredient-check"></div><div class="ingredient-name">${item.name}<br><span class="ing-type">${item.type}</span></div>`;
+    div.onclick = () => {
+      div.classList.toggle('checked');
+      const chk = div.querySelector('.ingredient-check');
+      chk.textContent = div.classList.contains('checked') ? '✓' : '';
+    };
+    list.appendChild(div);
+  });
+}
+
+const TRAY_ASSEMBLY_STEPS = [
+  { label: 'Насыпьте наполнитель (соль/сахар) на поднос ровным слоем', action: 'salt', emoji: '🧂' },
+  { label: 'Установите янтру в центр подноса (карточка, рисунок или символ планеты)', action: 'yantra', emoji: '🔯' },
+  { label: 'Напишите имена людей, для которых проводите чистку', action: 'names', emoji: '✍️' },
+  { label: 'Поставьте свечу или лампадку в центр янтры', action: 'candle', emoji: '🕯️' },
+  { label: 'Поставьте два стакана с водой по бокам', action: 'water', emoji: '💧' },
+  { label: 'Расставьте дополнительные ингредиенты вокруг', action: 'ingredients', emoji: '🌿' },
+];
+
+let trayStepDone = 0;
+
+function setupTraySteps() {
+  trayStepDone = 0;
+  // Hide all tray elements
+  ['tray-salt','tray-yantra','tray-names','tray-candle','tray-water-l','tray-water-r','tray-ings'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('visible');
+  });
+
+  if(simSelectedPlanet) {
+    const p = PLANETS[simSelectedPlanet];
+    const salt = document.getElementById('tray-salt');
+    salt.style.background = `radial-gradient(ellipse, ${p.color}33, ${p.color}11)`;
+    salt.textContent = p.filler[0];
+  }
+
+  renderTrayStepsList();
+}
+
+function renderTrayStepsList() {
+  const list = document.getElementById('tray-steps-list');
+  list.innerHTML = '';
+  TRAY_ASSEMBLY_STEPS.forEach((step, idx) => {
+    const li = document.createElement('li');
+    const isDone = idx < trayStepDone;
+    const isCurrent = idx === trayStepDone;
+    li.innerHTML = `
+      <div class="step-n" style="background:${isDone?'#5a9a5a':isCurrent?'var(--gold)':'rgba(212,168,67,0.3)'};color:${isDone||isCurrent?'#0d0d1a':'var(--text-dim)'}">${isDone?'✓':idx+1}</div>
+      <div style="flex:1">
+        <span style="opacity:${isDone?0.6:1};text-decoration:${isDone?'line-through':'none'}">${step.emoji} ${step.label}</span>
+        ${isCurrent ? `<div style="margin-top:6px"><button class="btn-gold" style="padding:7px 18px;font-size:0.85rem" onclick="doTrayStep(${idx})">Выполнено ✓</button></div>` : ''}
+      </div>`;
+    list.appendChild(li);
+  });
+}
+
+function doTrayStep(idx) {
+  const actions = {
+    'salt': () => { document.getElementById('tray-salt').classList.add('visible'); },
+    'yantra': () => { document.getElementById('tray-yantra').classList.add('visible'); },
+    'names': () => { document.getElementById('tray-names').classList.add('visible'); },
+    'candle': () => { document.getElementById('tray-candle').classList.add('visible'); },
+    'water': () => {
+      document.getElementById('tray-water-l').classList.add('visible');
+      document.getElementById('tray-water-r').classList.add('visible');
+    },
+    'ingredients': () => {
+      const ings = document.getElementById('tray-ings');
+      ings.innerHTML = simSelectedPlanet ? PLANETS[simSelectedPlanet].materials.slice(0,4).map(()=>'🌿').join('') : '🌿🌿🌿';
+      ings.classList.add('visible');
+    }
+  };
+  const action = TRAY_ASSEMBLY_STEPS[idx].action;
+  if(actions[action]) actions[action]();
+  trayStepDone = idx + 1;
+  renderTrayStepsList();
+}
+
+function setupMantra() {
+  mantaCount = 0;
+  if(simSelectedPlanet) {
+    const p = PLANETS[simSelectedPlanet];
+    document.getElementById('mantra-display').textContent = p.mantraFull;
+    document.getElementById('mantra-meaning').textContent = p.mantraMeaning;
+  }
+  updateMantraDisplay();
+}
+
+function countMantra() {
+  if(mantaCount >= 108) return;
+  mantaCount++;
+  updateMantraDisplay();
+  const counter = document.getElementById('mantra-counter');
+  counter.style.transform = 'scale(0.93)';
+  setTimeout(() => counter.style.transform = '', 150);
+}
+
+function updateMantraDisplay() {
+  document.getElementById('counter-num').textContent = mantaCount;
+  document.getElementById('mantra-fill').style.width = (mantaCount/108*100) + '%';
+  const btn = document.getElementById('btn-step6-next');
+  if(mantaCount >= 108) {
+    document.getElementById('mantra-status').innerHTML = '<span style="color:#5a9a5a;font-size:1rem">✓ 108 мантр прочитано! Чистка завершена.</span>';
+    if(btn) btn.disabled = false;
+  } else if(mantaCount > 0) {
+    document.getElementById('mantra-status').textContent = `Осталось: ${108 - mantaCount}`;
+    if(btn) btn.disabled = true;
+  } else {
+    document.getElementById('mantra-status').textContent = '';
+    if(btn) btn.disabled = true;
+  }
+}
+
+function resetMantra() {
+  mantaCount = 0;
+  updateMantraDisplay();
+}
+
+function lightCandle() {
+  candleLit = true;
+  document.getElementById('light-btn').style.display = 'none';
+  document.getElementById('candle-lit-msg').style.display = 'block';
+  document.getElementById('btn-step5-next').disabled = false;
+  document.getElementById('tray-candle').textContent = '🔥';
+}
+
+function simComplete() {
+  simCurrentStep = 7;
+  updateSimDisplay();
+  if(simSelectedPlanet) {
+    const p = PLANETS[simSelectedPlanet];
+    document.getElementById('success-text').textContent =
+      `Вы успешно провели астрочистку планеты ${p.name}! ` +
+      `Вы произнесли 108 мантр "${p.mantraFull}". ` +
+      `Ритуал проводится в ${p.day.toLowerCase()}, лицом на ${p.direction.toLowerCase()}. ` +
+      `После завершения свечу можно оставить догореть. `;
+  }
+}
+
+function simRestart() {
+  simCurrentStep = 1;
+  simSelectedPlanet = null;
+  simSelectedTray = null;
+  mantaCount = 0;
+  candleLit = false;
+  document.querySelectorAll('#sim-planet-options .option-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('btn-step1-next').disabled = true;
+  document.getElementById('btn-step2-next').disabled = true;
+  document.getElementById('sim-planet-label').textContent = 'Выберите планету';
+  updateSimDisplay();
+}
+
+// ===================== INIT =====================
+initDoshas();
+initPlanetSelect();
+initSimProgress();
+initSimPlanetOptions();
+updateSimDisplay();
+</script>
+</body>
+</html>
