@@ -817,26 +817,62 @@ function setupCanvas() {
   if (canvas) drawTray(canvas, 0);
 }
 
+function fillerColor() {
+  if (!sPlanet) return '#D4CBC0';
+  const f = P[sPlanet].filler[0].toLowerCase();
+  if (f.includes('чёрн') || f.includes('черн')) return '#7A6858';
+  if (f.includes('розов')) return '#E8C0B4';
+  if (f.includes('соль')) return '#D4CBC0';
+  if (f.includes('сахар') || f.includes('гур') || f.includes('куркум') || f.includes('мука')) return '#E8D870';
+  return '#D4CBC0';
+}
+
 function drawTray(canvas, step) {
   const ctx = canvas.getContext('2d');
   const W=260,H=260,cx=130,cy=130,R=118;
   ctx.clearRect(0,0,W,H);
   const pc = sPlanet ? P[sPlanet].color : '#E5291B';
+
+  /* — медный поднос — */
   ctx.save();
   ctx.beginPath();
-  ctx.ellipse(cx,cy,R,R*0.85,0,0,Math.PI*2);
-  const grad = ctx.createRadialGradient(cx,cy-20,10,cx,cy,R);
-  grad.addColorStop(0,'#1C2242'); grad.addColorStop(1,'#0C1128');
-  ctx.fillStyle = grad; ctx.fill();
-  ctx.strokeStyle = pc+'88'; ctx.lineWidth=2; ctx.stroke();
+  ctx.ellipse(cx,cy,R,R*0.88,0,0,Math.PI*2);
+  const copperRim = ctx.createRadialGradient(cx-24,cy-24,8,cx,cy,R);
+  copperRim.addColorStop(0,'#D4A055');
+  copperRim.addColorStop(0.45,'#B07830');
+  copperRim.addColorStop(1,'#7A4810');
+  ctx.fillStyle = copperRim; ctx.fill();
+  ctx.strokeStyle = '#5A3208'; ctx.lineWidth = 3; ctx.stroke();
   ctx.restore();
+
+  /* — внутренний бортик — */
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(cx,cy,R-7,(R-7)*0.88,0,0,Math.PI*2);
+  ctx.strokeStyle = 'rgba(215,155,70,0.45)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.restore();
+
   if (step>=1) {
+    /* — наполнитель — */
+    const fc = fillerColor();
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(cx,cy,R-8,(R-8)*0.85,0,0,Math.PI*2);
-    ctx.fillStyle = pc+'22'; ctx.fill(); ctx.restore();
-    ctx.fillStyle='#EDE4CC66'; ctx.font='10px Arial,sans-serif'; ctx.textAlign='center';
-    ctx.fillText(sPlanet ? P[sPlanet].filler[0] : 'Соль', cx, cy+50);
+    ctx.ellipse(cx,cy,R-10,(R-10)*0.86,0,0,Math.PI*2);
+    const fillGrad = ctx.createRadialGradient(cx,cy,5,cx,cy,R-10);
+    fillGrad.addColorStop(0, fc+'FF');
+    fillGrad.addColorStop(1, fc+'CC');
+    ctx.fillStyle = fillGrad; ctx.fill(); ctx.restore();
+    /* — подпись наполнителя — */
+    ctx.fillStyle='rgba(80,45,10,0.72)'; ctx.font='bold 9px Arial,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(sPlanet ? P[sPlanet].filler[0] : 'Наполнитель', cx, cy+54);
+  } else {
+    /* — пустой поднос (тёмная медь внутри) — */
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(cx,cy,R-10,(R-10)*0.86,0,0,Math.PI*2);
+    const innerG = ctx.createRadialGradient(cx,cy,4,cx,cy,R-10);
+    innerG.addColorStop(0,'#9A5E28'); innerG.addColorStop(1,'#5A3010');
+    ctx.fillStyle = innerG; ctx.fill(); ctx.restore();
   }
   if (step>=2) {
     ctx.save(); ctx.strokeStyle=pc+'CC'; ctx.lineWidth=1.5;
