@@ -342,6 +342,21 @@ body{
 .m-mala-uni{font-size:.71rem;color:var(--text-faint);font-style:italic;}
 /* ── SIM PLANET DAYS ─────────────────────────────────── */
 .sim-p-days{font-size:.64rem;color:var(--red);font-weight:700;margin-top:1px;letter-spacing:.02em;}
+/* ── PLANET INFO (from dosha) ────────────────────────── */
+.d-planet-pill.sel{border-color:var(--red)!important;border-width:2px;background:var(--card);}
+.d-planet-info{display:none;margin-top:14px;background:var(--card-alt);border:1.5px solid var(--acc-hi);border-radius:var(--r-lg);padding:18px;animation:fadeUp .25s ease;}
+.d-planet-info.on{display:block;}
+.d-pinfo-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.d-pinfo-sym{font-size:2rem;line-height:1;}
+.d-pinfo-name{font-family:'Jaipur',Georgia,serif;font-size:1.05rem;color:var(--text);}
+.d-pinfo-name em{font-style:italic;color:var(--text-dim);font-size:.9rem;}
+.d-pinfo-rows{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;margin-bottom:16px;}
+@media(max-width:480px){.d-pinfo-rows{grid-template-columns:1fr;}}
+.d-pinfo-row{display:flex;flex-direction:column;gap:2px;}
+.d-pinfo-lbl{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);}
+.d-pinfo-val{font-size:.88rem;color:var(--text);font-weight:700;}
+.d-pinfo-val em{font-style:normal;color:var(--red);}
+.d-pinfo-btns{display:flex;gap:10px;flex-wrap:wrap;}
 </style>
 </head>
 <body>
@@ -374,6 +389,7 @@ body{
     <div class="d-result-desc" id="dr-desc"></div>
     <div class="d-result-lbl" id="dr-lbl">Планеты для очищения — нажмите для подробностей</div>
     <div class="d-planet-row" id="dr-planets"></div>
+    <div class="d-planet-info" id="dr-planet-info"></div>
   </div>
 </section>
 
@@ -639,22 +655,62 @@ function pickDosha(d, el) {
     Object.values(P).forEach(pl => {
       const btn = document.createElement('button');
       btn.className = 'd-planet-pill';
+      btn.dataset.pid = pl.id;
       btn.innerHTML = `<span class="pill-sym">${pl.sym}</span><div><div>${pl.name}</div><div class="pill-day">Нича: ${NICHHA_SIGNS[pl.id]}</div></div>`;
-      btn.onclick = () => { goPage('planets', document.querySelectorAll('.nav-btn')[1]); pickPlanet(pl.id); };
+      btn.onclick = () => showPlanetInfo(pl.id);
       row.appendChild(btn);
     });
   } else {
-    lbl.textContent = 'Планеты для очищения — нажмите для подробностей';
+    lbl.textContent = 'Нажмите на планету — инструкции по чистке';
     d.planets.forEach(pid => {
       const pl = P[pid];
       const btn = document.createElement('button');
       btn.className = 'd-planet-pill';
+      btn.dataset.pid = pid;
       btn.innerHTML = `<span class="pill-sym">${pl.sym}</span><div><div>${pl.name}</div><div class="pill-day">${pl.day}</div></div>`;
-      btn.onclick = () => { goPage('planets', document.querySelectorAll('.nav-btn')[1]); pickPlanet(pid); };
+      btn.onclick = () => showPlanetInfo(pid);
       row.appendChild(btn);
     });
   }
+  document.getElementById('dr-planet-info').className = 'd-planet-info';
   res.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function showPlanetInfo(pid) {
+  document.querySelectorAll('.d-planet-pill').forEach(b => b.classList.toggle('sel', b.dataset.pid === pid));
+  const p = P[pid];
+  const panel = document.getElementById('dr-planet-info');
+  panel.className = 'd-planet-info on';
+  panel.innerHTML = `
+    <div class="d-pinfo-head">
+      <span class="d-pinfo-sym">${p.sym}</span>
+      <div>
+        <div class="d-pinfo-name">${p.name} <em>${p.nameRu}</em></div>
+      </div>
+    </div>
+    <div class="d-pinfo-rows">
+      <div class="d-pinfo-row">
+        <span class="d-pinfo-lbl">📅 День недели</span>
+        <span class="d-pinfo-val">${p.day}</span>
+      </div>
+      <div class="d-pinfo-row">
+        <span class="d-pinfo-lbl">🌒 Фаза луны</span>
+        <span class="d-pinfo-val"><em>Убывающая</em> (спадающая)</span>
+      </div>
+      <div class="d-pinfo-row">
+        <span class="d-pinfo-lbl">🧭 Лицом на</span>
+        <span class="d-pinfo-val">${p.dir}</span>
+      </div>
+      <div class="d-pinfo-row">
+        <span class="d-pinfo-lbl">📆 Курс</span>
+        <span class="d-pinfo-val"><em>${p.days} дней</em> подряд</span>
+      </div>
+    </div>
+    <div class="d-pinfo-btns">
+      <button class="btn-copper" onclick="launchSim('${pid}')">▶ Начать симулятор</button>
+      <button class="btn-ghost" onclick="goPage('planets',document.querySelectorAll('.nav-btn')[1]);pickPlanet('${pid}')">Подробнее →</button>
+    </div>`;
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 (function initPlanets() {
