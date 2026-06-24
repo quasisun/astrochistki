@@ -896,13 +896,13 @@ function setupCanvas() {
 }
 
 function fillerColor() {
-  if (!sPlanet) return '#D4CBC0';
+  if (!sPlanet) return '#E6E4E0';
   const f = P[sPlanet].filler[0].toLowerCase();
-  if (f.includes('чёрн') || f.includes('черн')) return '#7A6858';
-  if (f.includes('розов')) return '#E8C0B4';
-  if (f.includes('соль')) return '#D4CBC0';
-  if (f.includes('сахар') || f.includes('гур') || f.includes('куркум') || f.includes('мука')) return '#E8D870';
-  return '#D4CBC0';
+  if (f.includes('чёрн') || f.includes('черн')) return '#6A6058';
+  if (f.includes('розов')) return '#F2D8D0';
+  if (f.includes('соль')) return '#E8E6E2';
+  if (f.includes('сахар') || f.includes('гур') || f.includes('куркум') || f.includes('мука')) return '#EED870';
+  return '#E8E6E2';
 }
 
 function drawTray(canvas, step) {
@@ -937,11 +937,13 @@ function drawTray(canvas, step) {
     ctx.beginPath();
     ctx.ellipse(cx,cy,R-10,(R-10)*0.86,0,0,Math.PI*2);
     const fillGrad = ctx.createRadialGradient(cx,cy,5,cx,cy,R-10);
-    fillGrad.addColorStop(0, fc+'FF');
-    fillGrad.addColorStop(1, fc+'CC');
+    fillGrad.addColorStop(0, fc);
+    fillGrad.addColorStop(1, fc);
     ctx.fillStyle = fillGrad; ctx.fill(); ctx.restore();
     /* — подпись наполнителя — */
-    ctx.fillStyle='rgba(80,45,10,0.72)'; ctx.font='bold 9px Arial,sans-serif'; ctx.textAlign='center';
+    const dark = fc < '#888888';
+    ctx.fillStyle = dark ? 'rgba(240,230,220,0.9)' : 'rgba(60,30,5,0.78)';
+    ctx.font='bold 9px Arial,sans-serif'; ctx.textAlign='center';
     ctx.fillText(sPlanet ? P[sPlanet].filler[0] : 'Наполнитель', cx, cy+54);
   } else {
     /* — пустой поднос (тёмная медь внутри) — */
