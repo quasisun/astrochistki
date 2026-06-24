@@ -5,623 +5,314 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>АстроЧистка</title>
 <style>
-/* ── TOKENS ─────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
 :root {
-  --void:     #060A1C;
-  --field:    #0C1128;
-  --surface:  #141932;
-  --raised:   #1C2242;
-  --copper:   #BE6B18;
-  --flame:    #E09038;
-  --gilt:     #C89030;
-  --parch:    #ECE4CC;
-  --parch-dim:#A09880;
-  --dusk:     #6870A0;
-  --border:   rgba(190,107,24,.22);
-  --border-hi:rgba(190,107,24,.55);
-  --r:        8px;
-  --r-lg:     14px;
+  --red:       #E5291B;
+  --red-dark:  #9A1C0C;
+  --red-deep:  #6A100A;
+  --card:      #FFFFFF;
+  --card-alt:  #FEF6F5;
+  --text:      #1A0808;
+  --text-dim:  #6A3030;
+  --text-faint:#9A6060;
+  --acc:       rgba(229,41,27,.18);
+  --acc-hi:    rgba(229,41,27,.45);
+  --r:         8px;
+  --r-lg:      14px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-
 body{
-  background:var(--field);
-  color:var(--parch);
-  font-family:Trebuchet MS,'Segoe UI',system-ui,sans-serif;
-  font-size:15px;
-  line-height:1.6;
-  min-height:100vh;
-  overflow-x:hidden;
+  background:var(--red);
+  color:#FFF;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:15px;line-height:1.6;
+  min-height:100vh;overflow-x:hidden;
 }
 
-/* subtle star field — pure CSS, no images */
-body::before{
-  content:'';
-  position:fixed;inset:0;
-  background:
-    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,.35) 0%,transparent 100%),
-    radial-gradient(1px 1px at 27% 71%, rgba(255,255,255,.25) 0%,transparent 100%),
-    radial-gradient(1px 1px at 44% 34%, rgba(255,255,255,.40) 0%,transparent 100%),
-    radial-gradient(1px 1px at 61% 86%, rgba(255,255,255,.30) 0%,transparent 100%),
-    radial-gradient(1px 1px at 78% 12%, rgba(255,255,255,.35) 0%,transparent 100%),
-    radial-gradient(1px 1px at 89% 56%, rgba(255,255,255,.25) 0%,transparent 100%),
-    radial-gradient(1px 1px at 6%  90%, rgba(255,255,255,.20) 0%,transparent 100%),
-    radial-gradient(1px 1px at 52% 52%, rgba(255,255,255,.30) 0%,transparent 100%),
-    radial-gradient(1px 1px at 35% 8%,  rgba(255,255,255,.25) 0%,transparent 100%),
-    radial-gradient(1px 1px at 92% 78%, rgba(255,255,255,.35) 0%,transparent 100%);
-  pointer-events:none;z-index:0;
-}
-
-/* ── HEADER ──────────────────────────────────────────────── */
+/* ── HEADER ─────────────────────────────────────────── */
 .hd{
   position:sticky;top:0;z-index:200;
-  background:linear-gradient(180deg,var(--void) 0%,rgba(6,10,28,.96) 100%);
-  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,var(--red-dark) 0%,var(--red-deep) 100%);
+  border-bottom:2px solid rgba(255,255,255,.2);
   padding:14px 20px 0;
-  backdrop-filter:blur(8px);
 }
-.hd-inner{
-  max-width:860px;margin:0 auto;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-}
-.hd-wordmark{
-  display:flex;align-items:center;gap:10px;
-}
-.hd-glyph{
-  width:28px;height:28px;
-  position:relative;flex-shrink:0;
-}
-.hd-glyph::before{
-  content:'';position:absolute;inset:0;
-  border:1.5px solid var(--copper);
-  border-radius:50%;
-}
+.hd-inner{max-width:860px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.hd-wordmark{display:flex;align-items:center;gap:10px;}
+.hd-glyph{width:28px;height:28px;position:relative;flex-shrink:0;}
+.hd-glyph::before{content:'';position:absolute;inset:0;border:1.5px solid rgba(255,255,255,.7);border-radius:50%;}
 .hd-glyph::after{
-  content:'';position:absolute;
-  left:50%;top:16%;
-  transform:translateX(-50%);
-  width:0;height:0;
-  border-left:8px solid transparent;
-  border-right:8px solid transparent;
-  border-bottom:14px solid var(--copper);
+  content:'';position:absolute;left:50%;top:16%;transform:translateX(-50%);
+  width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;
+  border-bottom:14px solid rgba(255,255,255,.7);
 }
-.hd-title{
-  font-family:Georgia,'Times New Roman',serif;
-  font-size:1.35rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--parch);
-}
-.hd-title em{color:var(--flame);font-style:normal;}
-.hd-sub{
-  font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--dusk);margin-bottom:2px;
-}
-.nav{
-  display:flex;gap:0;
-  border-top:1px solid var(--border);
-  margin-top:10px;width:100%;justify-content:center;
-}
+.hd-title{font-family:'Playfair Display',Georgia,serif;font-size:1.35rem;letter-spacing:.2em;text-transform:uppercase;color:#FFF;}
+.hd-title em{color:rgba(255,255,255,.8);font-style:normal;}
+.hd-sub{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:2px;}
+.nav{display:flex;gap:0;border-top:1px solid rgba(255,255,255,.15);margin-top:10px;width:100%;justify-content:center;}
 .nav-btn{
-  padding:9px 24px;
-  background:none;border:none;
-  font-family:inherit;font-size:.82rem;letter-spacing:.06em;
-  color:var(--dusk);cursor:pointer;transition:color .2s;
-  position:relative;
+  padding:9px 24px;background:none;border:none;
+  font-family:Arial,sans-serif;font-size:.82rem;letter-spacing:.06em;
+  color:rgba(255,255,255,.65);cursor:pointer;transition:color .2s;position:relative;
 }
-.nav-btn::after{
-  content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;
-  background:var(--copper);transform:scaleX(0);transition:transform .2s;
-}
-.nav-btn:hover{color:var(--parch);}
-.nav-btn.on{color:var(--flame);}
+.nav-btn::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#FFF;transform:scaleX(0);transition:transform .2s;}
+.nav-btn:hover{color:#FFF;}
+.nav-btn.on{color:#FFF;}
 .nav-btn.on::after{transform:scaleX(1);}
 
-/* ── LAYOUT ──────────────────────────────────────────────── */
-.page{display:none;padding:28px 16px 60px;max-width:860px;margin:0 auto;position:relative;z-index:1;}
+/* ── LAYOUT ──────────────────────────────────────────── */
+.page{display:none;padding:28px 16px 60px;max-width:860px;margin:0 auto;}
 .page.on{display:block;}
-
-.pg-hed{
-  text-align:center;margin-bottom:28px;
-}
-.pg-title{
-  font-family:Georgia,serif;font-size:1.5rem;letter-spacing:.05em;
-  color:var(--parch);text-wrap:balance;
-}
-.pg-title em{color:var(--flame);font-style:normal;}
-.pg-body{
-  font-size:.82rem;color:var(--parch-dim);margin-top:6px;
-  max-width:500px;margin-left:auto;margin-right:auto;
-  line-height:1.7;text-wrap:balance;
-}
-
-/* ornament line */
-.orn{
-  display:flex;align-items:center;gap:10px;
-  margin:6px auto;width:fit-content;
-}
-.orn::before,.orn::after{
-  content:'';display:block;width:40px;height:1px;
-  background:linear-gradient(90deg,transparent,var(--copper));
-}
+.pg-hed{text-align:center;margin-bottom:28px;}
+.pg-title{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;letter-spacing:.05em;color:#FFF;text-wrap:balance;}
+.pg-title em{color:rgba(255,255,255,.8);font-style:normal;}
+.pg-body{font-size:.82rem;color:rgba(255,255,255,.82);margin-top:6px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.7;text-wrap:balance;}
+.orn{display:flex;align-items:center;gap:10px;margin:6px auto;width:fit-content;}
+.orn::before,.orn::after{content:'';display:block;width:40px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4));}
 .orn::after{transform:scaleX(-1);}
-.orn span{font-size:.6rem;color:var(--copper);letter-spacing:.3em;}
+.orn span{font-size:.6rem;color:rgba(255,255,255,.6);letter-spacing:.3em;}
 
-/* ── DOSHA GRID ─────────────────────────────────────────── */
-.dosha-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-  gap:12px;margin-bottom:24px;
-}
+/* ── DOSHA GRID ──────────────────────────────────────── */
+.dosha-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-bottom:24px;}
 .d-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r-lg);
-  padding:16px;cursor:pointer;
-  transition:border-color .2s,background .2s,transform .15s;
+  background:var(--card);border:1px solid var(--acc);
+  border-radius:var(--r-lg);padding:16px;cursor:pointer;
+  transition:border-color .2s,box-shadow .2s,transform .15s;
 }
-.d-card:hover,.d-card.sel{
-  border-color:var(--border-hi);
-  background:var(--raised);
-  transform:translateY(-2px);
-}
-.d-card.sel{border-color:var(--copper);}
-.d-head{
-  display:flex;align-items:center;gap:10px;margin-bottom:8px;
-}
-.d-sym{
-  width:34px;height:34px;flex-shrink:0;
-  border:1px solid var(--border-hi);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;
-}
-.d-name{
-  font-family:Georgia,serif;font-size:1rem;color:var(--parch);
-}
-.d-cause{
-  font-size:.72rem;color:var(--copper);margin-bottom:6px;
-  letter-spacing:.03em;
-}
-.d-desc{font-size:.79rem;color:var(--parch-dim);line-height:1.55;margin-bottom:10px;}
+.d-card:hover,.d-card.sel{border-color:var(--acc-hi);box-shadow:0 4px 16px rgba(229,41,27,.15);transform:translateY(-2px);}
+.d-card.sel{border-color:var(--red);border-width:2px;}
+.d-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.d-sym{width:34px;height:34px;flex-shrink:0;border:1px solid var(--acc-hi);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.d-name{font-family:'Playfair Display',Georgia,serif;font-size:1rem;color:var(--text);}
+.d-cause{font-size:.72rem;color:var(--red);margin-bottom:6px;letter-spacing:.03em;}
+.d-desc{font-size:.79rem;color:var(--text-dim);line-height:1.55;margin-bottom:10px;}
 .d-badges{display:flex;flex-wrap:wrap;gap:5px;}
-.badge{
-  padding:2px 9px;border-radius:20px;font-size:.72rem;
-  border:1px solid;font-weight:600;letter-spacing:.02em;
-}
-
-/* Dosha result panel */
-.d-result{
-  background:var(--surface);
-  border:1px solid var(--border-hi);
-  border-radius:var(--r-lg);
-  padding:20px;display:none;
-  animation:fadeUp .3s ease;
-}
+.badge{padding:2px 9px;border-radius:20px;font-size:.72rem;border:1px solid;font-weight:600;letter-spacing:.02em;}
+.d-result{background:var(--card);border:2px solid var(--acc-hi);border-radius:var(--r-lg);padding:20px;display:none;animation:fadeUp .3s ease;}
 .d-result.on{display:block;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.d-result-title{
-  font-family:Georgia,serif;font-size:1.1rem;
-  color:var(--flame);margin-bottom:6px;
-}
-.d-result-desc{font-size:.82rem;color:var(--parch-dim);margin-bottom:14px;line-height:1.6;}
-.d-result-lbl{
-  font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--dusk);margin-bottom:10px;
-}
+.d-result-title{font-family:'Playfair Display',Georgia,serif;font-size:1.1rem;color:var(--red);margin-bottom:6px;}
+.d-result-desc{font-size:.82rem;color:var(--text-dim);margin-bottom:14px;line-height:1.6;}
+.d-result-lbl{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-faint);margin-bottom:10px;}
 .d-planet-row{display:flex;flex-wrap:wrap;gap:10px;}
 .d-planet-pill{
-  display:flex;align-items:center;gap:8px;
-  background:var(--raised);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:8px 14px;cursor:pointer;
-  transition:border-color .2s,background .2s;
-  font-family:inherit;color:var(--parch);
-  font-size:.88rem;
+  display:flex;align-items:center;gap:8px;background:var(--card-alt);
+  border:1px solid var(--acc);border-radius:var(--r);padding:8px 14px;
+  cursor:pointer;transition:border-color .2s,background .2s;
+  font-family:Arial,sans-serif;color:var(--text);font-size:.88rem;
 }
-.d-planet-pill:hover{
-  border-color:var(--border-hi);
-  background:linear-gradient(135deg,var(--raised),rgba(190,107,24,.06));
-}
+.d-planet-pill:hover{border-color:var(--acc-hi);background:var(--card);}
 .pill-sym{font-size:1.3rem;}
-.pill-day{font-size:.7rem;color:var(--parch-dim);}
+.pill-day{font-size:.7rem;color:var(--text-faint);}
 
-/* ── PLANETS ─────────────────────────────────────────────── */
-.p-nav{
-  display:flex;flex-wrap:wrap;gap:8px;
-  justify-content:center;margin-bottom:24px;
-}
+/* ── PLANETS ─────────────────────────────────────────── */
+.p-nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px;}
 .p-chip{
-  width:68px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r);
-  padding:10px 6px 8px;
-  cursor:pointer;font-family:inherit;
-  color:var(--parch-dim);
-  transition:all .2s;text-align:center;
+  width:68px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+  border-radius:var(--r);padding:10px 6px 8px;cursor:pointer;
+  font-family:Arial,sans-serif;color:rgba(255,255,255,.8);transition:all .2s;text-align:center;
 }
-.p-chip:hover,.p-chip.on{
-  border-color:var(--border-hi);
-  background:var(--raised);color:var(--parch);
-}
+.p-chip:hover,.p-chip.on{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.6);color:#FFF;}
 .p-chip .c-sym{font-size:1.6rem;display:block;margin-bottom:4px;}
 .p-chip .c-lbl{font-size:.66rem;letter-spacing:.04em;}
-
-/* Planet detail */
 .p-detail{display:none;animation:fadeUp .3s ease;}
 .p-detail.on{display:block;}
-
 .p-banner{
-  border-radius:var(--r-lg) var(--r-lg) 0 0;
-  padding:24px 24px 20px;
-  display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  background:var(--card);border-radius:var(--r-lg) var(--r-lg) 0 0;
+  padding:24px 24px 20px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
   position:relative;overflow:hidden;
 }
-.p-banner::before{
-  content:'';position:absolute;inset:0;
-  background:var(--planet-glow,transparent);
-  opacity:.12;pointer-events:none;
-}
-.p-big-sym{
-  font-size:3.4rem;line-height:1;
-  filter:drop-shadow(0 0 12px var(--planet-color,var(--copper)));
-}
-.p-name{
-  font-family:Georgia,serif;
-  font-size:1.8rem;letter-spacing:.06em;
-  color:var(--planet-color,var(--parch));
-  text-shadow:0 0 20px color-mix(in srgb,var(--planet-color,var(--copper)) 40%,transparent);
-}
-.p-meta{font-size:.79rem;color:var(--parch-dim);margin-top:3px;line-height:1.7;}
-.p-dir{
-  display:inline-block;
-  font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--planet-color,var(--copper));
-  border:1px solid var(--planet-color,var(--copper));
-  padding:2px 8px;border-radius:20px;margin-top:4px;
-}
-
-.p-mantra-wrap{
-  grid-column:1/-1;
-  background:rgba(0,0,0,.3);
-  border-left:3px solid var(--planet-color,var(--copper));
-  padding:12px 16px;border-radius:0 var(--r) var(--r) 0;
-  margin-top:4px;
-}
-.p-mantra-lbl{
-  font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--dusk);margin-bottom:5px;
-}
-.p-mantra{
-  font-family:Georgia,serif;font-size:1.15rem;
-  letter-spacing:.08em;
-  color:var(--planet-color,var(--flame));
-  text-shadow:0 0 15px color-mix(in srgb,var(--planet-color,var(--flame)) 50%,transparent);
-}
-.p-mantra-meaning{font-size:.75rem;color:var(--parch-dim);margin-top:4px;}
-
+.p-banner::before{content:'';position:absolute;inset:0;background:var(--planet-glow,transparent);opacity:.07;pointer-events:none;}
+.p-big-sym{font-size:3.4rem;line-height:1;filter:drop-shadow(0 0 12px var(--planet-color,var(--red)));}
+.p-name{font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;letter-spacing:.06em;color:var(--planet-color,var(--text));}
+.p-meta{font-size:.79rem;color:var(--text-dim);margin-top:3px;line-height:1.7;}
+.p-dir{display:inline-block;font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--planet-color,var(--red));border:1px solid var(--planet-color,var(--red));padding:2px 8px;border-radius:20px;margin-top:4px;}
+.p-mantra-wrap{grid-column:1/-1;background:rgba(229,41,27,.04);border-left:3px solid var(--planet-color,var(--red));padding:12px 16px;border-radius:0 var(--r) var(--r) 0;margin-top:4px;}
+.p-mantra-lbl{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-faint);margin-bottom:5px;}
+.p-mantra{font-family:'Playfair Display',Georgia,serif;font-size:1.15rem;letter-spacing:.08em;color:var(--planet-color,var(--red));}
+.p-mantra-meaning{font-size:.75rem;color:var(--text-dim);margin-top:4px;}
 .p-body{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-top:none;
-  border-radius:0 0 var(--r-lg) var(--r-lg);
-  padding:0 16px 16px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-  gap:12px;
+  background:var(--card);border:1px solid var(--acc);border-top:none;
+  border-radius:0 0 var(--r-lg) var(--r-lg);padding:0 16px 16px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;
 }
-
-.p-section{
-  padding-top:16px;
-}
-.p-section-hed{
-  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--copper);margin-bottom:8px;
-  display:flex;align-items:center;gap:6px;
-}
-.p-section-hed::after{content:'';flex:1;height:1px;background:var(--border);}
+.p-section{padding-top:16px;}
+.p-section-hed{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.p-section-hed::after{content:'';flex:1;height:1px;background:var(--acc);}
 .chips{display:flex;flex-wrap:wrap;gap:5px;}
-.chip{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:5px;
-  padding:3px 9px;font-size:.78rem;color:var(--parch-dim);
-}
-
+.chip{background:var(--card-alt);border:1px solid var(--acc);border-radius:5px;padding:3px 9px;font-size:.78rem;color:var(--text-dim);}
 .p-doshas{grid-column:1/-1;}
-.p-dosha-line{
-  font-size:.8rem;color:var(--parch-dim);
-  padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);
-  line-height:1.5;
-}
+.p-dosha-line{font-size:.8rem;color:var(--text-dim);padding:4px 0;border-bottom:1px solid var(--acc);line-height:1.5;}
 .p-dosha-line:last-child{border-bottom:none;}
-.hl{color:#E8885A;}
+.hl{color:#C02010;}
+.p-action{grid-column:1/-1;padding-top:8px;text-align:center;}
 
-.p-action{
-  grid-column:1/-1;
-  padding-top:8px;text-align:center;
-}
-
-/* ── SHARED BUTTONS ─────────────────────────────────────── */
+/* ── BUTTONS ─────────────────────────────────────────── */
 .btn-copper{
-  background:linear-gradient(135deg,var(--copper),#8A4010);
-  color:#FFF8E8;
-  border:none;border-radius:22px;
-  padding:10px 28px;font-family:inherit;font-size:.88rem;
-  letter-spacing:.04em;cursor:pointer;
-  transition:filter .2s,transform .15s;
+  background:var(--red);color:#FFF;border:none;border-radius:22px;
+  padding:10px 28px;font-family:Arial,sans-serif;font-size:.88rem;
+  letter-spacing:.04em;font-weight:600;cursor:pointer;transition:filter .2s,transform .15s;
 }
-.btn-copper:hover{filter:brightness(1.15);transform:translateY(-1px);}
+.btn-copper:hover{filter:brightness(1.1);transform:translateY(-1px);}
 .btn-copper:active{transform:translateY(0);}
 .btn-copper:disabled{opacity:.35;cursor:default;transform:none;}
 .btn-ghost{
-  background:none;border:1px solid var(--border-hi);color:var(--copper);
+  background:#FFF;border:2px solid var(--red);color:var(--red);
   border-radius:22px;padding:9px 20px;
-  font-family:inherit;font-size:.85rem;cursor:pointer;
-  transition:background .2s,border-color .2s;
+  font-family:Arial,sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s;
 }
-.btn-ghost:hover{background:rgba(190,107,24,.08);}
+.btn-ghost:hover{background:rgba(229,41,27,.06);}
 .btn-ghost:disabled{opacity:.3;cursor:default;}
 
-/* ── SIMULATOR ───────────────────────────────────────────── */
-.sim-trail{
-  display:flex;align-items:center;justify-content:center;
-  gap:0;flex-wrap:nowrap;
-  margin-bottom:28px;overflow-x:auto;padding:4px 0;
-  scrollbar-width:none;
-}
+/* ── SIMULATOR ───────────────────────────────────────── */
+.sim-trail{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;margin-bottom:28px;overflow-x:auto;padding:4px 0;scrollbar-width:none;}
 .sim-trail::-webkit-scrollbar{display:none;}
-.s-dot-wrap{
-  display:flex;align-items:center;flex-shrink:0;
-}
+.s-dot-wrap{display:flex;align-items:center;flex-shrink:0;}
 .s-dot{
   width:30px;height:30px;border-radius:50%;
-  border:1.5px solid var(--border);
+  border:1.5px solid rgba(255,255,255,.35);
   display:flex;align-items:center;justify-content:center;
-  font-size:.75rem;color:var(--dusk);
-  background:var(--surface);
+  font-size:.75rem;color:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.15);
   transition:all .3s;cursor:default;flex-shrink:0;
-  font-family:Georgia,serif;
+  font-family:'Playfair Display',Georgia,serif;
 }
-.s-dot.done{
-  background:rgba(190,107,24,.2);
-  border-color:var(--copper);
-  color:var(--flame);
-}
-.s-dot.cur{
-  background:var(--copper);
-  border-color:var(--copper);
-  color:#FFF8E8;font-weight:bold;
-}
-.s-line{width:22px;height:1px;background:var(--border);flex-shrink:0;}
-.s-line.done{background:var(--copper);}
-.s-dot-lbl{
-  display:block;font-size:.6rem;color:var(--dusk);
-  text-align:center;margin-top:4px;letter-spacing:.03em;
-  white-space:nowrap;
-}
+.s-dot.done{background:rgba(255,255,255,.3);border-color:rgba(255,255,255,.7);color:#FFF;}
+.s-dot.cur{background:#FFF;border-color:#FFF;color:var(--red);font-weight:bold;}
+.s-line{width:22px;height:1px;background:rgba(255,255,255,.25);flex-shrink:0;}
+.s-line.done{background:rgba(255,255,255,.7);}
+.s-dot-lbl{display:block;font-size:.6rem;color:rgba(255,255,255,.6);text-align:center;margin-top:4px;letter-spacing:.03em;white-space:nowrap;}
 
-.sim-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--r-lg);
-  overflow:hidden;
-}
-
+.sim-card{background:var(--card);border:none;border-radius:var(--r-lg);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.18);}
 .sim-card-hd{
-  background:linear-gradient(135deg,var(--raised),rgba(28,34,66,.6));
-  border-bottom:1px solid var(--border);
-  padding:14px 20px;
-  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,var(--red-dark),var(--red));
+  padding:14px 20px;display:flex;align-items:center;gap:12px;
 }
-.sim-card-num{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--copper);color:#FFF8E8;
-  display:flex;align-items:center;justify-content:center;
-  font-family:Georgia,serif;font-size:1rem;font-weight:bold;
-  flex-shrink:0;
-}
-.sim-card-title{font-family:Georgia,serif;font-size:1.05rem;color:var(--parch);}
-.sim-card-sub{font-size:.76rem;color:var(--parch-dim);margin-top:2px;}
-
+.sim-card-num{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.25);color:#FFF;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',Georgia,serif;font-size:1rem;font-weight:bold;flex-shrink:0;}
+.sim-card-title{font-family:'Playfair Display',Georgia,serif;font-size:1.05rem;color:#FFF;}
+.sim-card-sub{font-size:.76rem;color:rgba(255,255,255,.7);margin-top:2px;}
 .sim-body{padding:20px;}
-
 .sim-step{display:none;}
 .sim-step.on{display:block;}
+.sim-footer{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-top:1px solid var(--acc);}
+.sim-planet-cur{font-size:.8rem;color:var(--text-dim);}
+.sim-planet-cur strong{color:var(--red);}
 
-.sim-footer{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 20px;
-  border-top:1px solid var(--border);
-}
-.sim-planet-cur{font-size:.8rem;color:var(--parch-dim);}
-.sim-planet-cur strong{color:var(--flame);}
+.hint{border-left:3px solid var(--red);background:rgba(229,41,27,.05);padding:10px 14px;border-radius:0 var(--r) var(--r) 0;font-size:.8rem;color:var(--text-dim);line-height:1.6;margin-bottom:16px;}
+.hint strong{color:var(--text);}
 
-/* hint box */
-.hint{
-  border-left:2px solid var(--copper);
-  background:rgba(190,107,24,.05);
-  padding:10px 14px;border-radius:0 var(--r) var(--r) 0;
-  font-size:.8rem;color:var(--parch-dim);
-  line-height:1.6;margin-bottom:16px;
-}
-.hint strong{color:var(--parch);}
-
-/* Step 1 */
-.sim-planets{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
-  gap:10px;
-}
-.sim-p-opt{
-  background:var(--raised);border:1.5px solid var(--border);
-  border-radius:var(--r);padding:14px 10px;
-  text-align:center;cursor:pointer;
-  transition:border-color .2s,background .2s,transform .15s;
-  font-family:inherit;color:var(--parch-dim);
-}
-.sim-p-opt:hover,.sim-p-opt.sel{
-  border-color:var(--border-hi);background:rgba(28,34,66,.9);color:var(--parch);
-  transform:translateY(-2px);
-}
-.sim-p-opt.sel{border-color:var(--copper);}
+/* step 1 */
+.sim-planets{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
+.sim-p-opt{background:var(--card-alt);border:1.5px solid var(--acc);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s,transform .15s;font-family:Arial,sans-serif;color:var(--text-dim);}
+.sim-p-opt:hover,.sim-p-opt.sel{border-color:var(--red);background:var(--card);color:var(--text);transform:translateY(-2px);}
+.sim-p-opt.sel{border-width:2px;}
 .sim-p-sym{font-size:2rem;display:block;margin-bottom:6px;}
 .sim-p-name{font-size:.85rem;}
-.sim-p-day{font-size:.7rem;color:var(--dusk);margin-top:2px;}
+.sim-p-day{font-size:.7rem;color:var(--text-faint);margin-top:2px;}
 
-/* Step 2 */
-.tray-opts{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-  margin-top:4px;
-}
+/* step 2 – tray */
+.tray-opts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
 @media(max-width:420px){.tray-opts{grid-template-columns:1fr;}}
 .tray-opt{
-  background:var(--raised);border:1.5px solid var(--border);
-  border-radius:var(--r);padding:16px 12px;
-  text-align:center;cursor:pointer;
-  transition:all .2s;font-family:inherit;color:var(--parch-dim);
+  background:var(--card-alt);border:1.5px solid var(--acc);
+  border-radius:var(--r);padding:20px 12px 16px;
+  text-align:center;cursor:pointer;transition:all .2s;
+  font-family:Arial,sans-serif;color:var(--text-dim);
+  position:relative;
 }
-.tray-opt:hover,.tray-opt.sel{
-  border-color:var(--copper);background:rgba(28,34,66,.9);color:var(--parch);
+.tray-opt:hover,.tray-opt.sel{border-color:var(--red);border-width:2px;background:var(--card);color:var(--text);}
+.tray-opt.universal{border-color:rgba(229,41,27,.4);}
+.tray-opt.universal::before{
+  content:'★ Для всех планет';
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:var(--red);color:#FFF;
+  font-size:.6rem;font-weight:700;letter-spacing:.05em;
+  padding:2px 10px;border-radius:10px;white-space:nowrap;
 }
 .tray-opt .t-icon{font-size:2.4rem;display:block;margin-bottom:8px;}
-.tray-opt .t-name{font-size:.88rem;font-weight:600;}
-.tray-opt .t-note{font-size:.72rem;color:var(--dusk);margin-top:4px;line-height:1.4;}
+.tray-opt .t-name{font-size:.88rem;font-weight:700;color:var(--text);}
+.tray-opt .t-note{font-size:.72rem;color:var(--text-faint);margin-top:4px;line-height:1.4;}
 
-/* Step 3 */
-.ing-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:7px;
-  margin-top:4px;
-}
-.ing-item{
-  display:flex;align-items:center;gap:9px;
-  background:var(--raised);
-  border:1px solid var(--border);
-  border-radius:var(--r);padding:9px 11px;
-  cursor:pointer;transition:border-color .2s;font-size:.81rem;
-}
-.ing-item:hover{border-color:var(--border-hi);}
-.ing-item.chk{
-  background:rgba(50,110,50,.12);
-  border-color:rgba(80,160,80,.4);
-}
-.ing-box{
-  width:18px;height:18px;flex-shrink:0;
-  border:1.5px solid var(--border-hi);border-radius:4px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.7rem;transition:all .2s;
-}
-.ing-item.chk .ing-box{background:rgba(80,160,80,.6);border-color:transparent;color:#fff;}
-.ing-text{flex:1;line-height:1.3;}
-.ing-type{font-size:.66rem;color:var(--dusk);display:block;margin-top:1px;}
+/* step 3 */
+.ing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:7px;margin-top:4px;}
+.ing-item{display:flex;align-items:center;gap:9px;background:var(--card-alt);border:1px solid var(--acc);border-radius:var(--r);padding:9px 11px;cursor:pointer;transition:border-color .2s;font-size:.81rem;}
+.ing-item:hover{border-color:var(--acc-hi);}
+.ing-item.chk{background:rgba(40,160,40,.06);border-color:rgba(40,140,40,.3);}
+.ing-box{width:18px;height:18px;flex-shrink:0;border:1.5px solid var(--acc-hi);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .2s;}
+.ing-item.chk .ing-box{background:rgba(40,140,40,.6);border-color:transparent;color:#fff;}
+.ing-text{flex:1;line-height:1.3;color:var(--text);}
+.ing-type{font-size:.66rem;color:var(--text-faint);display:block;margin-top:1px;}
 
-/* Step 4 */
-.assembly{
-  display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start;
-}
+/* step 4 */
+.assembly{display:grid;grid-template-columns:280px 1fr;gap:24px;align-items:start;}
 @media(max-width:580px){.assembly{grid-template-columns:1fr;}}
 .tray-vis-wrap{display:flex;justify-content:center;}
 .tray-canvas-wrap{position:relative;width:260px;height:260px;}
 #trayCanvas{border-radius:50%;display:block;}
-
 .asm-steps{list-style:none;padding:0;}
-.asm-step{
-  display:flex;gap:10px;padding:9px 0;
-  border-bottom:1px solid rgba(255,255,255,.04);
-  font-size:.82rem;line-height:1.5;
-}
+.asm-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--acc);font-size:.82rem;line-height:1.5;}
 .asm-step:last-child{border:none;}
-.asm-num{
-  width:22px;height:22px;flex-shrink:0;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.7rem;font-weight:bold;margin-top:1px;
-  transition:all .3s;
-}
-.asm-step .asm-num{background:rgba(190,107,24,.25);color:var(--copper);}
-.asm-step.done .asm-num{background:rgba(60,140,60,.4);color:#90D090;}
+.asm-num{width:22px;height:22px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:bold;margin-top:1px;transition:all .3s;}
+.asm-step .asm-num{background:rgba(229,41,27,.12);color:var(--red);}
+.asm-step.done .asm-num{background:rgba(40,140,40,.2);color:#2A8030;}
 .asm-step.done .asm-text{opacity:.55;text-decoration:line-through;}
-.asm-step.cur .asm-num{background:var(--copper);color:#fff;}
-.asm-text{flex:1;}
+.asm-step.cur .asm-num{background:var(--red);color:#fff;}
+.asm-text{flex:1;color:var(--text-dim);}
 .asm-btn-row{margin-top:6px;}
 
-/* Step 5 */
-.candle-types{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;
-  margin-top:4px;margin-bottom:20px;
-}
-.c-type{
-  background:var(--raised);border:1px solid var(--border);
-  border-radius:var(--r);padding:12px;font-size:.8rem;line-height:1.55;
-}
-.c-type strong{display:block;color:var(--parch);margin-bottom:4px;font-size:.85rem;}
+/* step 5 */
+.candle-types{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:4px;margin-bottom:20px;}
+.c-type{background:var(--card-alt);border:1px solid var(--acc);border-radius:var(--r);padding:12px;font-size:.8rem;line-height:1.55;color:var(--text-dim);}
+.c-type strong{display:block;color:var(--text);margin-bottom:4px;font-size:.85rem;}
 .candle-center{text-align:center;padding:10px 0;}
 .candle-big{font-size:3rem;display:block;margin-bottom:12px;transition:all .4s;}
 .candle-big.lit{filter:drop-shadow(0 0 12px #FFAA20) drop-shadow(0 0 24px #FF8800);}
-.light-confirm{
-  color:var(--flame);font-size:.9rem;
-  margin-top:12px;font-family:Georgia,serif;
-  font-style:italic;min-height:1.4em;
-}
+.light-confirm{color:var(--red);font-size:.9rem;margin-top:12px;font-family:'Playfair Display',Georgia,serif;font-style:italic;min-height:1.4em;}
 
-/* Step 6 */
+/* step 6 */
 .mantra-center{text-align:center;}
-.m-text{
-  font-family:Georgia,serif;font-size:1.25rem;
-  letter-spacing:.1em;color:var(--flame);
-  line-height:1.6;margin-bottom:6px;
-  text-shadow:0 0 20px rgba(224,144,56,.4);
-}
-.m-meaning{font-size:.78rem;color:var(--parch-dim);margin-bottom:24px;}
+.m-text{font-family:'Playfair Display',Georgia,serif;font-size:1.25rem;letter-spacing:.1em;color:var(--red);line-height:1.6;margin-bottom:6px;}
+.m-meaning{font-size:.78rem;color:var(--text-dim);margin-bottom:24px;}
 .m-ring-wrap{position:relative;width:130px;height:130px;margin:0 auto 18px;cursor:pointer;}
-.m-ring-wrap:hover .m-disk{background:rgba(190,107,24,.12);}
+.m-ring-wrap:hover .m-disk{background:rgba(229,41,27,.08);}
 .m-ring-wrap:active .m-disk{transform:scale(.93);}
 .m-svg{position:absolute;inset:0;width:100%;height:100%;}
-.m-disk{
-  position:absolute;inset:8px;
-  border-radius:50%;background:rgba(190,107,24,.06);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:background .15s,transform .1s;
-  user-select:none;
-}
-.m-count{
-  font-family:'Courier New',monospace;font-size:2.6rem;
-  font-weight:bold;color:var(--parch);line-height:1;
-}
-.m-denom{font-size:.72rem;color:var(--dusk);}
-.m-bar-wrap{
-  width:100%;max-width:280px;height:5px;
-  background:rgba(255,255,255,.08);border-radius:3px;
-  margin:0 auto 12px;overflow:hidden;
-}
-.m-bar{
-  height:100%;border-radius:3px;
-  background:linear-gradient(90deg,var(--copper),var(--flame));
-  transition:width .25s ease;
-}
-.m-status{font-size:.8rem;color:var(--parch-dim);min-height:1.3em;margin-bottom:10px;}
-.m-status.done{color:#80C080;font-family:Georgia,serif;font-style:italic;}
+.m-disk{position:absolute;inset:8px;border-radius:50%;background:rgba(229,41,27,.04);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:background .15s,transform .1s;user-select:none;}
+.m-count{font-family:'Courier New',monospace;font-size:2.6rem;font-weight:bold;color:var(--text);line-height:1;}
+.m-denom{font-size:.72rem;color:var(--text-faint);}
+.m-bar-wrap{width:100%;max-width:280px;height:5px;background:rgba(229,41,27,.12);border-radius:3px;margin:0 auto 12px;overflow:hidden;}
+.m-bar{height:100%;border-radius:3px;background:var(--red);transition:width .25s ease;}
+.m-status{font-size:.8rem;color:var(--text-dim);min-height:1.3em;margin-bottom:10px;}
+.m-status.done{color:#2A8030;font-family:'Playfair Display',Georgia,serif;font-style:italic;}
 
-/* Step 7 */
-.success{text-align:center;padding:30px 20px 20px;}
-.s-yantra{font-size:3.5rem;margin-bottom:14px;display:block;}
-.s-title{
-  font-family:Georgia,serif;font-size:1.5rem;
-  color:var(--parch);margin-bottom:8px;
+/* step 7 – report */
+.success{text-align:center;padding:24px 20px 16px;}
+.s-yantra{font-size:3.5rem;margin-bottom:10px;display:block;}
+.s-title{font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;color:var(--text);margin-bottom:6px;}
+.s-body{font-size:.85rem;color:var(--text-dim);line-height:1.7;max-width:460px;margin:0 auto 16px;}
+.s-report{
+  text-align:left;background:var(--card-alt);border:1px solid var(--acc);
+  border-radius:var(--r-lg);padding:18px;margin:0 auto 20px;max-width:500px;
 }
-.s-body{
-  font-size:.85rem;color:var(--parch-dim);
-  line-height:1.7;max-width:400px;margin:0 auto 24px;
+.s-report-title{
+  font-family:'Playfair Display',Georgia,serif;font-size:.9rem;color:var(--red);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:12px;border-bottom:2px solid var(--acc);padding-bottom:8px;
 }
+.s-report-row{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--acc);font-size:.82rem;}
+.s-report-row:last-child{border:none;}
+.s-report-lbl{color:var(--text-faint);min-width:110px;flex-shrink:0;line-height:1.4;}
+.s-report-val{color:var(--text);font-weight:600;flex:1;line-height:1.4;}
 .s-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
+/* ── RESPONSIVE ──────────────────────────────────────── */
 @media(max-width:600px){
   .hd-title{font-size:1.1rem;}
   .nav-btn{padding:9px 14px;font-size:.78rem;}
   .assembly{grid-template-columns:1fr;}
 }
-@media(prefers-reduced-motion:reduce){
-  *{animation-duration:0s !important;transition-duration:0s !important;}
-}
+@media(prefers-reduced-motion:reduce){*{animation-duration:0s !important;transition-duration:0s !important;}}
 </style>
 </head>
 <body>
@@ -641,6 +332,7 @@ body::before{
   </div>
 </header>
 
+<!-- ═══════════════ DOSHAS ═══════════════ -->
 <section class="page on" id="pg-doshas">
   <div class="pg-hed">
     <div class="pg-title">Определите <em>дошу</em></div>
@@ -656,6 +348,7 @@ body::before{
   </div>
 </section>
 
+<!-- ═══════════════ PLANETS ═══════════════ -->
 <section class="page" id="pg-planets">
   <div class="pg-hed">
     <div class="pg-title">Планеты <em>Наваграха</em></div>
@@ -666,6 +359,7 @@ body::before{
   <div id="p-detail"></div>
 </section>
 
+<!-- ═══════════════ SIMULATOR ═══════════════ -->
 <section class="page" id="pg-simulator">
   <div class="pg-hed">
     <div class="pg-title">Практика <em>ритуала</em></div>
@@ -676,6 +370,7 @@ body::before{
   <div class="sim-trail" id="sim-trail"></div>
 
   <div class="sim-card">
+    <!-- Step 1 -->
     <div class="sim-step on" id="ss1">
       <div class="sim-card-hd"><div class="sim-card-num">1</div><div><div class="sim-card-title">Выбор планеты</div><div class="sim-card-sub">Каждая планета — свой день, своя энергия</div></div></div>
       <div class="sim-body">
@@ -689,14 +384,27 @@ body::before{
       </div>
     </div>
 
+    <!-- Step 2 -->
     <div class="sim-step" id="ss2">
       <div class="sim-card-hd"><div class="sim-card-num">2</div><div><div class="sim-card-title">Выбор подноса</div><div class="sim-card-sub">Основа для размещения ингредиентов</div></div></div>
       <div class="sim-body">
         <div class="hint">Поднос должен быть чистым. Традиционно — круглой или овальной формы, чтобы энергия циркулировала без углов.</div>
         <div class="tray-opts">
-          <button class="tray-opt" onclick="sTray(this,'metal')"><span class="t-icon">🥘</span><div class="t-name">Металлический</div><div class="t-note">Универсальный, медный или стальной</div></button>
-          <button class="tray-opt" onclick="sTray(this,'wood')"><span class="t-icon">🪵</span><div class="t-name">Деревянный</div><div class="t-note">Для Юпитера, Солнца, Меркурия</div></button>
-          <button class="tray-opt" onclick="sTray(this,'ceramic')"><span class="t-icon">⬜</span><div class="t-name">Белая керамика</div><div class="t-note">Луна, Венера</div></button>
+          <button class="tray-opt universal" onclick="sTray(this,'copper')">
+            <span class="t-icon">🟤</span>
+            <div class="t-name">Медный</div>
+            <div class="t-note">Подходит для всех планет</div>
+          </button>
+          <button class="tray-opt" onclick="sTray(this,'steel')">
+            <span class="t-icon">⬜</span>
+            <div class="t-name">Нержавейка</div>
+            <div class="t-note">Нейтральный, практичный</div>
+          </button>
+          <button class="tray-opt" onclick="sTray(this,'glass')">
+            <span class="t-icon">🔵</span>
+            <div class="t-name">Стеклянный</div>
+            <div class="t-note">Чистый, прозрачный</div>
+          </button>
         </div>
       </div>
       <div class="sim-footer">
@@ -706,6 +414,7 @@ body::before{
       </div>
     </div>
 
+    <!-- Step 3 -->
     <div class="sim-step" id="ss3">
       <div class="sim-card-hd"><div class="sim-card-num">3</div><div><div class="sim-card-title">Ингредиенты</div><div class="sim-card-sub">Отметьте то, что есть в наличии</div></div></div>
       <div class="sim-body">
@@ -719,6 +428,7 @@ body::before{
       </div>
     </div>
 
+    <!-- Step 4 -->
     <div class="sim-step" id="ss4">
       <div class="sim-card-hd"><div class="sim-card-num">4</div><div><div class="sim-card-title">Расстановка на подносе</div><div class="sim-card-sub">Последовательность имеет значение</div></div></div>
       <div class="sim-body">
@@ -738,13 +448,14 @@ body::before{
       </div>
     </div>
 
+    <!-- Step 5 -->
     <div class="sim-step" id="ss5">
       <div class="sim-card-hd"><div class="sim-card-num">5</div><div><div class="sim-card-title">Зажигаем свечу или лампадку</div><div class="sim-card-sub">Огонь открывает ритуальное пространство</div></div></div>
       <div class="sim-body">
         <div class="hint"><strong>Важно:</strong> свечи должны быть без программ — не церковные, без надписей. Самодельные свечи с наполнителями планеты — лучший вариант.</div>
         <div class="candle-types">
           <div class="c-type"><strong>🕯️ Восковые / парафиновые</strong>Цветные, ароматизированные. Цвет — по планете. Самодельные с кристаллами и маслами.</div>
-          <div class="c-type"><strong>🪔 Лампадка с маслом</strong>Масло для <span id="lamp-p-name">планеты</span>: <strong id="lamp-oil" style="color:var(--flame)">—</strong>. Горит дольше, подходит для полного цикла из 108 мантр.</div>
+          <div class="c-type"><strong>🪔 Лампадка с маслом</strong>Масло для <span id="lamp-p-name">планеты</span>: <strong id="lamp-oil" style="color:var(--red)">—</strong>. Горит дольше, подходит для полного цикла из 108 мантр.</div>
         </div>
         <div class="candle-center">
           <span class="candle-big" id="candle-icon">🕯️</span>
@@ -759,6 +470,7 @@ body::before{
       </div>
     </div>
 
+    <!-- Step 6 -->
     <div class="sim-step" id="ss6">
       <div class="sim-card-hd"><div class="sim-card-num">6</div><div><div class="sim-card-title">Чтение мантры — 108 раз</div><div class="sim-card-sub">Полный цикл пробуждает планетарную энергию</div></div></div>
       <div class="sim-body">
@@ -767,15 +479,15 @@ body::before{
           <div class="m-meaning" id="m-meaning"></div>
           <div class="m-ring-wrap" onclick="mCount()" id="m-ring">
             <svg class="m-svg" viewBox="0 0 130 130">
-              <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(190,107,24,.2)" stroke-width="6"/>
+              <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(229,41,27,.2)" stroke-width="6"/>
               <circle id="m-arc" cx="65" cy="65" r="56" fill="none"
                 stroke="url(#mg)" stroke-width="6" stroke-linecap="round"
                 stroke-dasharray="352" stroke-dashoffset="352"
                 transform="rotate(-90 65 65)" style="transition:stroke-dashoffset .25s ease"/>
               <defs>
                 <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#BE6B18"/>
-                  <stop offset="100%" stop-color="#E09038"/>
+                  <stop offset="0%" stop-color="#9A1C0C"/>
+                  <stop offset="100%" stop-color="#E5291B"/>
                 </linearGradient>
               </defs>
             </svg>
@@ -796,12 +508,14 @@ body::before{
       </div>
     </div>
 
+    <!-- Step 7 – complete -->
     <div class="sim-step" id="ss7">
       <div class="sim-body">
         <div class="success">
           <span class="s-yantra">🔯</span>
           <div class="s-title">Чистка завершена</div>
           <div class="s-body" id="s-body"></div>
+          <div class="s-report" id="s-report"></div>
           <div class="s-btns">
             <button class="btn-copper" onclick="sRestart()">Новая чистка</button>
             <button class="btn-ghost" onclick="goPage('planets',document.querySelectorAll('.nav-btn')[1])">Изучить планеты</button>
@@ -814,26 +528,26 @@ body::before{
 
 <script>
 const P = {
-  sun:     { id:'sun',     name:'Солнце',  nameRu:'Сурья',  sym:'☀️',  day:'Воскресенье', dir:'Восток',           color:'#E8A030', mantra:'ОМ СУМ СУРЬЯЕЙ НАМАХА',    mantraMeaning:'Приветствие Сурье — богу Солнца, дарующему жизнь и свет',        lampOil:'Подсолнечное или гхи',         filler:['Пальмовый сахар','Гур','Пшеничная мука'],                                                          oils:['Жасминовое','Сандал','Апельсин'],       mats:['Медь','Золото','Рубин','Пшеница','Мёд','Куркума','Жёлтый цветок'],                                     doshas:['Питри доша (Сатурн + Солнце)','Аспект Раху/Кету на Солнце — ½ эффекта'] },
-  moon:    { id:'moon',    name:'Луна',    nameRu:'Чандра', sym:'🌙',  day:'Понедельник', dir:'Северо-Запад',      color:'#B8D8F0', mantra:'ОМ ЧАМ ЧАНДРАЕЙ НАМАХА',  mantraMeaning:'Приветствие Чандре — богу Луны, управляющему умом и эмоциями', lampOil:'Кокосовое или кунжутное',      filler:['Морская соль'],                                                                                    oils:['Кокосовое','Жасминовое','Роза'],        mats:['Жемчуг','Лунный камень','Белый рис','Молоко','Кокос','Серебро'],                                       doshas:['Матри доша (Сатурн + Луна)','Аспект Раху/Кету на Луну — ½ эффекта'] },
-  mars:    { id:'mars',    name:'Марс',    nameRu:'Мангала',sym:'♂️',  day:'Вторник',     dir:'Юг',               color:'#D82020', mantra:'ОМ МАНГ МАНГАЛАЙЕ НАМАХА', mantraMeaning:'Приветствие Мангале — Марсу, планете силы, воли и действия',    lampOil:'Жасминовое или гхи',           filler:['Каменная розовая соль','Соль мёртвого моря'],                                                       oils:['Жасминовое','Сладкий миндаль','Ладан','Сандал','Корица','Гвоздика'], mats:['Красный коралл','Рубин (не яркий)','Мёд','Сахар','Каменная розовая соль','Фенхель','Куркума','Чили','Чёрный перец','Имбирь','Корица','Гвоздика','Ладан','Камфора','Соль мёртвого моря','Сандаловое дерево','Гранат','Масур дал'], doshas:['Куджа доша: Марс в 1, 2, 4, 7, 8, 12 доме','Пишача доша (Марс + Раху + Кету + Сатурн)','Марс нича (в слабом знаке)'] },
-  mercury: { id:'mercury', name:'Меркурий',nameRu:'Будха',  sym:'☿',  day:'Среда',       dir:'Север',            color:'#38A838', mantra:'ОМ БУМ БУДДХАЕЙ НАМАХА',   mantraMeaning:'Приветствие Будхе — Меркурию, планете интеллекта',              lampOil:'Кунжутное',                    filler:['Соль (любая)','Сахар (любой)'],                                                                     oils:['Кунжутное','Мята','Эвкалипт'],          mats:['Изумруд','Нефрит','Маш-дал (зелёная чечевица)','Мята','Зелёный кардамон','Фенхель'],                    doshas:['Меркурий нича или слабый','Меркурий ретроградный'] },
-  jupiter: { id:'jupiter', name:'Юпитер',  nameRu:'Гуру',   sym:'♃',  day:'Четверг',     dir:'Северо-Восток',    color:'#D4B000', mantra:'ОМ ГУМ ГУРУВЕ НАМАХА',     mantraMeaning:'Приветствие Гуру — Юпитеру, планете мудрости и благодати',     lampOil:'Гхи',                          filler:['Пальмовый сахар','Тростниковый сахар','Гур','Куркума','Нутовая мука'],                              oils:['Гхи','Сандал','Лимон'],                 mats:['Жёлтый сапфир','Топаз','Нутовая мука','Куркума','Гур','Бананы','Жёлтые цветы'],                        doshas:['Брахма доша (Сатурн + Юпитер)','Чандала доша (Юпитер + Раху)','Юпитер нича'] },
-  venus:   { id:'venus',   name:'Венера',  nameRu:'Шукра',  sym:'♀',  day:'Пятница',     dir:'Юго-Восток',       color:'#E080B0', mantra:'ОМ ШУМ ШУКРАЕЙ НАМАХА',    mantraMeaning:'Приветствие Шукре — Венере, планете любви и красоты',          lampOil:'Кунжутное',                    filler:['Морская соль'],                                                                                     oils:['Кунжутное','Роза','Жасмин','Иланг-иланг'],mats:['Алмаз','Белый сапфир','Белый рис','Сахар','Молоко','Роза','Жасмин','Белый шёлк'],                      doshas:['Венера нича','Венера в слабом положении'] },
-  saturn:  { id:'saturn',  name:'Сатурн',  nameRu:'Шани',   sym:'♄',  day:'Суббота',     dir:'Запад',            color:'#6878D0', mantra:'ОМ ШАМ ШАНАЙЕ НАМАХА',     mantraMeaning:'Приветствие Шани — Сатурну, планете кармы и справедливости',   lampOil:'Горчичное или ореховое',       filler:['Каменная соль (особенно чёрная)'],                                                                  oils:['Кипарис','Ладан','Мирра','Эвкалипт','Сандал','Чёрный кунжут','Пачули','Горчичное'], mats:['Каменная соль','Камфора','Священный базилик','Аметист','Сапфир','Сталь','Железо','Уголь','Миндаль','Чёрный кунжут (семена)'], doshas:['Матри доша (Сатурн + Луна)','Питри доша (Сатурн + Солнце)','Брахма доша (Сатурн + Юпитер)','Пишача доша (Марс + Раху + Кету + Сатурн)'] },
-  rahu:    { id:'rahu',    name:'Раху',    nameRu:'Раху',   sym:'☊',  day:'Суббота',     dir:'Юго-Запад',        color:'#8040A8', mantra:'ОМ РАМ РАХАВЭ НАМАХА',     mantraMeaning:'Приветствие Раху — северному лунному узлу, планете иллюзий',   lampOil:'Горчичное',                    filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Кокос','Лаванда','Сандаловое дерево','Анис','Сладкий миндаль','Горчица','Ячмень','Сапфир','Цирконий','Апатит'], doshas:['Затмение (Раху + Солнце/Луна)','Чандала доша (Юпитер + Раху)','Каласарпа доша (все планеты между Раху и Кету)'] },
-  ketu:    { id:'ketu',    name:'Кету',    nameRu:'Кету',   sym:'☋',  day:'Четверг',     dir:'Северо-Восток',    color:'#806040', mantra:'ОМ КЕЙМ КЕТАВЭ НАМАХА',    mantraMeaning:'Приветствие Кету — южному лунному узлу, планете мокши',       lampOil:'Горчичное',                    filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Камфора','Ваниль','Сандаловое дерево','Сезам','Сладкий миндаль','Банан','Кошачий глаз','Лаксунья','Черно-белый камень'], doshas:['Затмение (Кету + Солнце/Луна)','Пишача доша (Кету + Марс)','Каласарпа доша (все планеты между Раху и Кету)'] },
+  sun:     { id:'sun',     name:'Солнце',  nameRu:'Сурья',  sym:'☀️',  day:'Воскресенье', dir:'Восток',        color:'#E8A030', mantra:'ОМ СУМ СУРЬЯЕЙ НАМАХА',    mantraMeaning:'Приветствие Сурье — богу Солнца, дарующему жизнь и свет',        lampOil:'Подсолнечное или гхи',    filler:['Пальмовый сахар','Гур','Пшеничная мука'],                                                          oils:['Жасминовое','Сандал','Апельсин'],       mats:['Медь','Золото','Рубин','Пшеница','Мёд','Куркума','Жёлтый цветок'],                                     doshas:['Питри доша (Сатурн + Солнце)','Аспект Раху/Кету на Солнце — ½ эффекта'] },
+  moon:    { id:'moon',    name:'Луна',    nameRu:'Чандра', sym:'🌙',  day:'Понедельник', dir:'Северо-Запад',  color:'#5888B8', mantra:'ОМ ЧАМ ЧАНДРАЕЙ НАМАХА',  mantraMeaning:'Приветствие Чандре — богу Луны, управляющему умом и эмоциями', lampOil:'Кокосовое или кунжутное', filler:['Морская соль'],                                                                                    oils:['Кокосовое','Жасминовое','Роза'],        mats:['Жемчуг','Лунный камень','Белый рис','Молоко','Кокос','Серебро'],                                       doshas:['Матри доша (Сатурн + Луна)','Аспект Раху/Кету на Луну — ½ эффекта'] },
+  mars:    { id:'mars',    name:'Марс',    nameRu:'Мангала',sym:'♂️',  day:'Вторник',     dir:'Юг',            color:'#D82020', mantra:'ОМ МАНГ МАНГАЛАЙЕ НАМАХА', mantraMeaning:'Приветствие Мангале — Марсу, планете силы, воли и действия',    lampOil:'Жасминовое или гхи',      filler:['Каменная розовая соль','Соль мёртвого моря'],                                                       oils:['Жасминовое','Сладкий миндаль','Ладан','Сандал','Корица','Гвоздика'], mats:['Красный коралл','Рубин','Мёд','Сахар','Каменная розовая соль','Фенхель','Куркума','Чили','Чёрный перец','Имбирь','Корица','Гвоздика','Ладан','Камфора','Соль мёртвого моря','Сандаловое дерево','Гранат','Масур дал'], doshas:['Куджа доша: Марс в 1, 2, 4, 7, 8, 12 доме','Пишача доша (Марс + Раху + Кету + Сатурн)','Марс нича (в слабом знаке)'] },
+  mercury: { id:'mercury', name:'Меркурий',nameRu:'Будха',  sym:'☿',  day:'Среда',       dir:'Север',         color:'#38A838', mantra:'ОМ БУМ БУДДХАЕЙ НАМАХА',   mantraMeaning:'Приветствие Будхе — Меркурию, планете интеллекта',              lampOil:'Кунжутное',               filler:['Соль (любая)','Сахар (любой)'],                                                                     oils:['Кунжутное','Мята','Эвкалипт'],          mats:['Изумруд','Нефрит','Маш-дал (зелёная чечевица)','Мята','Зелёный кардамон','Фенхель'],                    doshas:['Меркурий нича или слабый','Меркурий ретроградный'] },
+  jupiter: { id:'jupiter', name:'Юпитер',  nameRu:'Гуру',   sym:'♃',  day:'Четверг',     dir:'Северо-Восток', color:'#C4A000', mantra:'ОМ ГУМ ГУРУВЕ НАМАХА',     mantraMeaning:'Приветствие Гуру — Юпитеру, планете мудрости и благодати',     lampOil:'Гхи',                     filler:['Пальмовый сахар','Тростниковый сахар','Гур','Куркума','Нутовая мука'],                              oils:['Гхи','Сандал','Лимон'],                 mats:['Жёлтый сапфир','Топаз','Нутовая мука','Куркума','Гур','Бананы','Жёлтые цветы'],                        doshas:['Брахма доша (Сатурн + Юпитер)','Чандала доша (Юпитер + Раху)','Юпитер нича'] },
+  venus:   { id:'venus',   name:'Венера',  nameRu:'Шукра',  sym:'♀',  day:'Пятница',     dir:'Юго-Восток',    color:'#C060A0', mantra:'ОМ ШУМ ШУКРАЕЙ НАМАХА',    mantraMeaning:'Приветствие Шукре — Венере, планете любви и красоты',          lampOil:'Кунжутное',               filler:['Морская соль'],                                                                                     oils:['Кунжутное','Роза','Жасмин','Иланг-иланг'],mats:['Алмаз','Белый сапфир','Белый рис','Сахар','Молоко','Роза','Жасмин','Белый шёлк'],                      doshas:['Венера нича','Венера в слабом положении'] },
+  saturn:  { id:'saturn',  name:'Сатурн',  nameRu:'Шани',   sym:'♄',  day:'Суббота',     dir:'Запад',         color:'#5868C0', mantra:'ОМ ШАМ ШАНАЙЕ НАМАХА',     mantraMeaning:'Приветствие Шани — Сатурну, планете кармы и справедливости',   lampOil:'Горчичное или ореховое',  filler:['Каменная соль (особенно чёрная)'],                                                                  oils:['Кипарис','Ладан','Мирра','Эвкалипт','Сандал','Чёрный кунжут','Пачули','Горчичное'], mats:['Каменная соль','Камфора','Священный базилик','Аметист','Сапфир','Сталь','Железо','Уголь','Миндаль','Чёрный кунжут (семена)'], doshas:['Матри доша (Сатурн + Луна)','Питри доша (Сатурн + Солнце)','Брахма доша (Сатурн + Юпитер)','Пишача доша (Марс + Раху + Кету + Сатурн)'] },
+  rahu:    { id:'rahu',    name:'Раху',    nameRu:'Раху',   sym:'☊',  day:'Суббота',     dir:'Юго-Запад',     color:'#8040A8', mantra:'ОМ РАМ РАХАВЭ НАМАХА',     mantraMeaning:'Приветствие Раху — северному лунному узлу, планете иллюзий',   lampOil:'Горчичное',               filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Кокос','Лаванда','Сандаловое дерево','Анис','Сладкий миндаль','Горчица','Ячмень','Сапфир','Цирконий','Апатит'], doshas:['Затмение (Раху + Солнце/Луна)','Чандала доша (Юпитер + Раху)','Каласарпа доша (все планеты между Раху и Кету)'] },
+  ketu:    { id:'ketu',    name:'Кету',    nameRu:'Кету',   sym:'☋',  day:'Четверг',     dir:'Северо-Восток', color:'#806040', mantra:'ОМ КЕЙМ КЕТАВЭ НАМАХА',    mantraMeaning:'Приветствие Кету — южному лунному узлу, планете мокши',       lampOil:'Горчичное',               filler:['Каменная соль'],                                                                                    oils:['Горчичное'],                            mats:['Каменная соль','Ладан','Мирра','Лимон','Камфора','Ваниль','Сандаловое дерево','Сезам','Сладкий миндаль','Банан','Кошачий глаз'], doshas:['Затмение (Кету + Солнце/Луна)','Пишача доша (Кету + Марс)','Каласарпа доша (все планеты между Раху и Кету)'] },
 };
 
 const DOSHAS = [
-  { id:'matri',    emoji:'🌙', name:'Матри доша',     cause:'Сатурн + Луна', planets:['saturn','moon'],    desc:'Нарушение в материнской линии. Сложности со здоровьем, эмоциями, отношениями с матерью.' },
-  { id:'pitri',    emoji:'☀️', name:'Питри доша',     cause:'Сатурн + Солнце', planets:['saturn','sun'],   desc:'Предковая доша. Препятствия в карьере, авторитете, отношениях с отцом.' },
-  { id:'brahma',   emoji:'♃', name:'Брахма доша',     cause:'Сатурн + Юпитер', planets:['saturn','jupiter'],desc:'Ослабление мудрости. Влияет на духовный рост, обучение, учителей.' },
-  { id:'kuja',     emoji:'♂️', name:'Куджа доша',      cause:'Марс в 1,2,4,7,8,12 доме', planets:['mars'], desc:'Мангал доша. Проблемы в партнёрстве, браке, склонность к конфликтам.' },
-  { id:'pishaca',  emoji:'🔺', name:'Пишача доша',    cause:'Марс + Раху + Кету (+Сатурн)', planets:['mars','rahu','ketu','saturn'], desc:'Сильное искажение. Требует очищения нескольких планет одновременно.' },
-  { id:'chandala', emoji:'🌀', name:'Чандала доша',   cause:'Юпитер + Раху', planets:['jupiter','rahu'],   desc:'Мудрость Юпитера замутнена Раху. Ложные учители, духовные заблуждения.' },
-  { id:'kalasarpa',emoji:'🐍', name:'Каласарпа доша', cause:'Все планеты между Раху и Кету', planets:['rahu','ketu','sun','moon','mars','mercury','jupiter','venus','saturn'], desc:'Все планеты охвачены Каласарпой. Сильное кармическое ограничение — все девять планет требуют работы.' },
-  { id:'grahan',   emoji:'🌑', name:'Доша затмения',  cause:'Раху/Кету + Солнце/Луна', planets:['rahu','ketu','sun','moon'], desc:'Раху или Кету в соединении с Солнцем или Луной — затмение сознания.' },
+  { id:'matri',    emoji:'🌙', name:'Матри доша',     cause:'Сатурн + Луна',                     planets:['saturn','moon'],                               desc:'Нарушение в материнской линии. Сложности со здоровьем, эмоциями, отношениями с матерью.' },
+  { id:'pitri',    emoji:'☀️', name:'Питри доша',     cause:'Сатурн + Солнце',                   planets:['saturn','sun'],                                desc:'Предковая доша. Препятствия в карьере, авторитете, отношениях с отцом.' },
+  { id:'brahma',   emoji:'♃',  name:'Брахма доша',    cause:'Сатурн + Юпитер',                   planets:['saturn','jupiter'],                            desc:'Ослабление мудрости. Влияет на духовный рост, обучение, учителей.' },
+  { id:'kuja',     emoji:'♂️', name:'Куджа доша',     cause:'Марс в 1,2,4,7,8,12 доме',          planets:['mars'],                                        desc:'Мангал доша. Проблемы в партнёрстве, браке, склонность к конфликтам.' },
+  { id:'pishaca',  emoji:'🔺', name:'Пишача доша',    cause:'Марс + Раху + Кету (+Сатурн)',       planets:['mars','rahu','ketu','saturn'],                  desc:'Сильное искажение. Требует очищения нескольких планет одновременно.' },
+  { id:'chandala', emoji:'🌀', name:'Чандала доша',   cause:'Юпитер + Раху',                     planets:['jupiter','rahu'],                              desc:'Мудрость Юпитера замутнена Раху. Ложные учители, духовные заблуждения.' },
+  { id:'kalasarpa',emoji:'🐍', name:'Каласарпа доша', cause:'Все планеты между Раху и Кету',      planets:['rahu','ketu','sun','moon','mars','mercury','jupiter','venus','saturn'], desc:'Все планеты охвачены Каласарпой. Сильное кармическое ограничение — все девять планет требуют работы.' },
+  { id:'grahan',   emoji:'🌑', name:'Доша затмения',  cause:'Раху/Кету + Солнце/Луна',           planets:['rahu','ketu','sun','moon'],                     desc:'Раху или Кету в соединении с Солнцем или Луной — затмение сознания.' },
 ];
 
 function goPage(id, btn) {
@@ -904,7 +618,7 @@ function pickPlanet(id) {
       <div class="p-banner">
         <div class="p-big-sym">${p.sym}</div>
         <div>
-          <div class="p-name">${p.name} <span style="font-family:Georgia,serif;font-style:italic;font-size:1rem;color:${p.color}88">${p.nameRu}</span></div>
+          <div class="p-name">${p.name} <span style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1rem;color:${p.color}88">${p.nameRu}</span></div>
           <div class="p-meta">📅 ${p.day} &nbsp;·&nbsp; 🧭 ${p.dir}</div>
           <div class="p-dir">${p.dir.toUpperCase()}</div>
         </div>
@@ -942,30 +656,19 @@ function pickPlanet(id) {
     </div>`;
 }
 
-let sStep = 1;
-let sPlanet = null;
-let sTrayType = null;
-let sMantraCount = 0;
-let sCandleLit = false;
-let sAsmStep = 0;
+let sStep = 1, sPlanet = null, sTrayType = null, sMantraCount = 0, sCandleLit = false, sAsmStep = 0;
 
 const STEPS = [
-  { n:1, lbl:'Планета' },
-  { n:2, lbl:'Поднос' },
-  { n:3, lbl:'Ингредиенты' },
-  { n:4, lbl:'Сборка' },
-  { n:5, lbl:'Огонь' },
-  { n:6, lbl:'Мантра' },
-  { n:7, lbl:'Готово' },
+  {n:1,lbl:'Планета'},{n:2,lbl:'Поднос'},{n:3,lbl:'Ингредиенты'},
+  {n:4,lbl:'Сборка'},{n:5,lbl:'Огонь'},{n:6,lbl:'Мантра'},{n:7,lbl:'Готово'},
 ];
-
 const ASM_STEPS = [
-  { key:'salt',  text:'Насыпьте наполнитель ровным слоем', icon:'🧂' },
-  { key:'yantra',text:'Установите янтру (символ планеты) в центр', icon:'🔯' },
-  { key:'names', text:'Напишите имена, для кого проводится чистка', icon:'✍️' },
-  { key:'candle',text:'Поставьте свечу или лампадку в центр янтры', icon:'🕯️' },
-  { key:'water', text:'Поставьте два стакана с водой по бокам', icon:'💧' },
-  { key:'ings',  text:'Расставьте дополнительные ингредиенты вокруг', icon:'🌿' },
+  {key:'salt',  text:'Насыпьте наполнитель ровным слоем', icon:'🧂'},
+  {key:'yantra',text:'Установите янтру (символ планеты) в центр', icon:'🔯'},
+  {key:'names', text:'Напишите имена, для кого проводится чистка', icon:'✍️'},
+  {key:'candle',text:'Поставьте свечу или лампадку в центр янтры', icon:'🕯️'},
+  {key:'water', text:'Поставьте два стакана с водой по бокам', icon:'💧'},
+  {key:'ings',  text:'Расставьте дополнительные ингредиенты вокруг', icon:'🌿'},
 ];
 
 (function initTrail() {
@@ -975,8 +678,7 @@ const ASM_STEPS = [
     wrap.className = 's-dot-wrap';
     if (i > 0) {
       const line = document.createElement('div');
-      line.className = 's-line';
-      line.id = `sl${i}`;
+      line.className = 's-line'; line.id = `sl${i}`;
       wrap.appendChild(line);
     }
     wrap.innerHTML += `<div class="s-dot" id="sd${s.n}"><span>${s.n < 7 ? s.n : '✓'}</span><span class="s-dot-lbl">${s.lbl}</span></div>`;
@@ -988,13 +690,11 @@ const ASM_STEPS = [
   const grid = document.getElementById('sim-planets');
   Object.values(P).forEach(p => {
     const div = document.createElement('div');
-    div.className = 'sim-p-opt';
-    div.dataset.pid = p.id;
+    div.className = 'sim-p-opt'; div.dataset.pid = p.id;
     div.innerHTML = `<span class="sim-p-sym">${p.sym}</span><div class="sim-p-name">${p.name}</div><div class="sim-p-day">${p.day}</div>`;
     div.onclick = () => {
       document.querySelectorAll('.sim-p-opt').forEach(c => c.classList.remove('sel'));
-      div.classList.add('sel');
-      sPlanet = p.id;
+      div.classList.add('sel'); sPlanet = p.id;
       document.getElementById('sn1').disabled = false;
       syncLabels();
     };
@@ -1025,9 +725,7 @@ function updateTrail() {
 }
 
 function showStep(n) {
-  document.querySelectorAll('.sim-step').forEach((el, i) => {
-    el.classList.toggle('on', i + 1 === n);
-  });
+  document.querySelectorAll('.sim-step').forEach((el, i) => el.classList.toggle('on', i + 1 === n));
   updateTrail();
 }
 
@@ -1042,27 +740,17 @@ function onStepEnter(n) {
 }
 
 function launchSim(pid) {
-  sPlanet = pid;
-  sStep = 1;
-  sTrayType = null;
-  sMantraCount = 0;
-  sCandleLit = false;
-  sAsmStep = 0;
-  document.querySelectorAll('.sim-p-opt').forEach(c => {
-    c.classList.toggle('sel', c.dataset.pid === pid);
-  });
+  sPlanet = pid; sStep = 1; sTrayType = null; sMantraCount = 0; sCandleLit = false; sAsmStep = 0;
+  document.querySelectorAll('.sim-p-opt').forEach(c => c.classList.toggle('sel', c.dataset.pid === pid));
   document.getElementById('sn1').disabled = false;
   syncLabels();
   goPage('simulator', document.querySelectorAll('.nav-btn')[2]);
-  sStep = 2;
-  showStep(2);
-  onStepEnter(2);
+  sStep = 2; showStep(2); onStepEnter(2);
 }
 
 function sTray(el, type) {
   document.querySelectorAll('.tray-opt').forEach(c => c.classList.remove('sel'));
-  el.classList.add('sel');
-  sTrayType = type;
+  el.classList.add('sel'); sTrayType = type;
   document.getElementById('sn2').disabled = false;
 }
 
@@ -1072,10 +760,7 @@ function setupIngredients() {
   document.getElementById('ing-hint').innerHTML = `<strong>Наполнитель для ${p.name}:</strong> ${p.filler.join(', ')} — насыпается первым, создаёт основу для янтры.`;
   const grid = document.getElementById('ing-grid');
   grid.innerHTML = '';
-  const all = [
-    ...p.filler.map(x => ({ n: x, t: 'Наполнитель' })),
-    ...p.mats.map(x  => ({ n: x, t: 'Материал' })),
-  ];
+  const all = [...p.filler.map(x=>({n:x,t:'Наполнитель'})),...p.mats.map(x=>({n:x,t:'Материал'}))];
   all.forEach(item => {
     const div = document.createElement('div');
     div.className = 'ing-item';
@@ -1091,88 +776,48 @@ function setupIngredients() {
 function setupCanvas() {
   sAsmStep = 0;
   const canvas = document.getElementById('trayCanvas');
-  if (!canvas) return;
-  drawTray(canvas, 0);
+  if (canvas) drawTray(canvas, 0);
 }
 
 function drawTray(canvas, step) {
   const ctx = canvas.getContext('2d');
-  const W = 260, H = 260, cx = 130, cy = 130, R = 118;
-  ctx.clearRect(0, 0, W, H);
-  const pc = sPlanet ? P[sPlanet].color : '#BE6B18';
+  const W=260,H=260,cx=130,cy=130,R=118;
+  ctx.clearRect(0,0,W,H);
+  const pc = sPlanet ? P[sPlanet].color : '#E5291B';
   ctx.save();
   ctx.beginPath();
-  ctx.ellipse(cx, cy, R, R * 0.85, 0, 0, Math.PI * 2);
-  const grad = ctx.createRadialGradient(cx, cy - 20, 10, cx, cy, R);
-  grad.addColorStop(0, '#1C2242');
-  grad.addColorStop(1, '#0C1128');
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.strokeStyle = pc + '88';
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  ctx.ellipse(cx,cy,R,R*0.85,0,0,Math.PI*2);
+  const grad = ctx.createRadialGradient(cx,cy-20,10,cx,cy,R);
+  grad.addColorStop(0,'#1C2242'); grad.addColorStop(1,'#0C1128');
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.strokeStyle = pc+'88'; ctx.lineWidth=2; ctx.stroke();
   ctx.restore();
-  if (step >= 1) {
+  if (step>=1) {
     ctx.save();
     ctx.beginPath();
-    ctx.ellipse(cx, cy, R - 8, (R - 8) * 0.85, 0, 0, Math.PI * 2);
-    ctx.fillStyle = pc + '22';
-    ctx.fill();
-    ctx.restore();
-    ctx.fillStyle = '#EDE4CC66';
-    ctx.font = '10px Trebuchet MS, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(sPlanet ? P[sPlanet].filler[0] : 'Соль', cx, cy + 50);
+    ctx.ellipse(cx,cy,R-8,(R-8)*0.85,0,0,Math.PI*2);
+    ctx.fillStyle = pc+'22'; ctx.fill(); ctx.restore();
+    ctx.fillStyle='#EDE4CC66'; ctx.font='10px Arial,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(sPlanet ? P[sPlanet].filler[0] : 'Соль', cx, cy+50);
   }
-  if (step >= 2) {
-    ctx.save();
-    ctx.strokeStyle = pc + 'CC';
-    ctx.lineWidth = 1.5;
-    const sq = 74;
-    ctx.strokeRect(cx - sq / 2, cy - sq / 2, sq, sq);
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - 36);
-    ctx.lineTo(cx + 36, cy + 22);
-    ctx.lineTo(cx - 36, cy + 22);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(cx, cy, 18, 0, Math.PI * 2);
-    ctx.stroke();
+  if (step>=2) {
+    ctx.save(); ctx.strokeStyle=pc+'CC'; ctx.lineWidth=1.5;
+    const sq=74; ctx.strokeRect(cx-sq/2,cy-sq/2,sq,sq);
+    ctx.beginPath(); ctx.moveTo(cx,cy-36); ctx.lineTo(cx+36,cy+22); ctx.lineTo(cx-36,cy+22); ctx.closePath(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.stroke();
     ctx.restore();
   }
-  if (step >= 3) {
-    ctx.save();
-    ctx.fillStyle = pc + 'BB';
-    ctx.font = 'italic 9px Georgia, serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Имя · Имя · Имя', cx, cy - R * 0.7);
-    ctx.restore();
+  if (step>=3) {
+    ctx.save(); ctx.fillStyle=pc+'BB'; ctx.font='italic 9px Georgia,serif'; ctx.textAlign='center';
+    ctx.fillText('Имя · Имя · Имя',cx,cy-R*0.7); ctx.restore();
   }
-  if (step >= 4) {
-    ctx.save();
-    ctx.font = '22px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('🕯️', cx, cy + 8);
-    ctx.restore();
-  }
-  if (step >= 5) {
-    ctx.save();
-    ctx.font = '18px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('💧', cx - 50, cy + 30);
-    ctx.fillText('💧', cx + 50, cy + 30);
-    ctx.restore();
-  }
-  if (step >= 6) {
-    ctx.save();
-    ctx.font = '14px serif';
-    ctx.textAlign = 'center';
-    ['🌿','💎','🧂'].forEach((e, i) => {
-      const angle = -Math.PI / 2 + (i - 1) * 1.1;
-      const rx = cx + Math.cos(angle) * (R - 28);
-      const ry = cy + Math.sin(angle) * (R - 28) * 0.82;
-      ctx.fillText(e, rx, ry);
+  if (step>=4) { ctx.save(); ctx.font='22px serif'; ctx.textAlign='center'; ctx.fillText('🕯️',cx,cy+8); ctx.restore(); }
+  if (step>=5) { ctx.save(); ctx.font='18px serif'; ctx.textAlign='center'; ctx.fillText('💧',cx-50,cy+30); ctx.fillText('💧',cx+50,cy+30); ctx.restore(); }
+  if (step>=6) {
+    ctx.save(); ctx.font='14px serif'; ctx.textAlign='center';
+    ['🌿','💎','🧂'].forEach((e,i)=>{
+      const angle=-Math.PI/2+(i-1)*1.1;
+      ctx.fillText(e,cx+Math.cos(angle)*(R-28),cy+Math.sin(angle)*(R-28)*0.82);
     });
     ctx.restore();
   }
@@ -1181,21 +826,21 @@ function drawTray(canvas, step) {
 function renderAsmSteps() {
   const list = document.getElementById('asm-steps');
   list.innerHTML = '';
-  ASM_STEPS.forEach((s, i) => {
+  ASM_STEPS.forEach((s,i) => {
     const li = document.createElement('li');
-    li.className = 'asm-step' + (i < sAsmStep ? ' done' : i === sAsmStep ? ' cur' : '');
+    li.className = 'asm-step'+(i<sAsmStep?' done':i===sAsmStep?' cur':'');
     li.innerHTML = `
-      <div class="asm-num">${i < sAsmStep ? '✓' : i + 1}</div>
+      <div class="asm-num">${i<sAsmStep?'✓':i+1}</div>
       <div class="asm-text">
         ${s.icon} ${s.text}
-        ${i === sAsmStep ? `<div class="asm-btn-row"><button class="btn-copper" style="padding:6px 16px;font-size:.78rem" onclick="doAsmStep(${i})">Выполнено</button></div>` : ''}
+        ${i===sAsmStep?`<div class="asm-btn-row"><button class="btn-copper" style="padding:6px 16px;font-size:.78rem" onclick="doAsmStep(${i})">Выполнено</button></div>`:''}
       </div>`;
     list.appendChild(li);
   });
 }
 
 function doAsmStep(i) {
-  sAsmStep = i + 1;
+  sAsmStep = i+1;
   const canvas = document.getElementById('trayCanvas');
   if (canvas) drawTray(canvas, sAsmStep);
   renderAsmSteps();
@@ -1245,8 +890,8 @@ function mReset() { sMantraCount = 0; updateMantraUI(); }
 function updateMantraUI() {
   document.getElementById('m-num').textContent = sMantraCount;
   const pct = sMantraCount / 108;
-  document.getElementById('m-bar').style.width = (pct * 100) + '%';
-  document.getElementById('m-arc').setAttribute('stroke-dashoffset', 352 * (1 - pct));
+  document.getElementById('m-bar').style.width = (pct*100)+'%';
+  document.getElementById('m-arc').setAttribute('stroke-dashoffset', 352*(1-pct));
   const status = document.getElementById('m-status');
   const btn = document.getElementById('sn6');
   if (sMantraCount >= 108) {
@@ -1254,7 +899,7 @@ function updateMantraUI() {
     status.className = 'm-status done';
     if (btn) btn.disabled = false;
   } else if (sMantraCount > 0) {
-    status.textContent = `Осталось: ${108 - sMantraCount}`;
+    status.textContent = `Осталось: ${108-sMantraCount}`;
     status.className = 'm-status';
     if (btn) btn.disabled = true;
   } else {
@@ -1267,26 +912,31 @@ function updateMantraUI() {
 function sDone() {
   sStep = 7;
   showStep(7);
-  if (sPlanet) {
-    const p = P[sPlanet];
-    document.getElementById('s-body').textContent =
-      `Вы провели астрочистку планеты ${p.name} (${p.nameRu}) и прочитали 108 мантр "${p.mantra}". ` +
-      `Ритуал совершается в ${p.day.toLowerCase()}, лицом на ${p.dir.toLowerCase()}. ` +
-      `После завершения свечу можно оставить догореть. Вода после ритуала — слить в водоём или в унитаз.`;
-  }
+  if (!sPlanet) return;
+  const p = P[sPlanet];
+  const trayNames = { copper:'Медный (универсальный)', steel:'Нержавейка', glass:'Стеклянный' };
+  document.getElementById('s-body').innerHTML =
+    `Астрочистка планеты <strong>${p.name}</strong> (${p.nameRu}) завершена — прочитано 108 мантр.`;
+  document.getElementById('s-report').innerHTML = `
+    <div class="s-report-title">📋 Отчёт о проведённой пудже</div>
+    <div class="s-report-row"><span class="s-report-lbl">🌟 Планета</span><span class="s-report-val">${p.sym} ${p.name} — ${p.nameRu}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">📅 День</span><span class="s-report-val">${p.day}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">🧭 Направление</span><span class="s-report-val">Лицом на ${p.dir}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">🥘 Поднос</span><span class="s-report-val">${trayNames[sTrayType] || '—'}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">🧂 Наполнитель</span><span class="s-report-val">${p.filler.join(', ')}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">🪔 Масло лампадки</span><span class="s-report-val">${p.lampOil}</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">🕉 Мантра</span><span class="s-report-val">${p.mantra} × 108</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">🕯️ После ритуала</span><span class="s-report-val">Свечу оставить догореть до конца</span></div>
+    <div class="s-report-row"><span class="s-report-lbl">💧 Вода</span><span class="s-report-val">Вылить в водоём или под дерево — не в унитаз</span></div>`;
 }
 
 function sRestart() {
-  sPlanet = null; sTrayType = null; sMantraCount = 0; sCandleLit = false; sAsmStep = 0;
-  sStep = 1;
+  sPlanet=null; sTrayType=null; sMantraCount=0; sCandleLit=false; sAsmStep=0; sStep=1;
   document.querySelectorAll('.sim-p-opt').forEach(c => c.classList.remove('sel'));
   document.querySelectorAll('.tray-opt').forEach(c => c.classList.remove('sel'));
   document.getElementById('sn1').disabled = true;
   document.getElementById('sn2').disabled = true;
-  [1,2,3,4,5,6].forEach(n => {
-    const el = document.getElementById(`sc-lbl${n}`);
-    if (el) el.innerHTML = '';
-  });
+  [1,2,3,4,5,6].forEach(n => { const el=document.getElementById(`sc-lbl${n}`); if(el) el.innerHTML=''; });
   showStep(1);
 }
 
