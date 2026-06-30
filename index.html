@@ -357,6 +357,113 @@ body{
 .d-pinfo-val{font-size:.88rem;color:var(--text);font-weight:700;}
 .d-pinfo-val em{font-style:normal;color:var(--red);}
 .d-pinfo-btns{display:flex;gap:10px;flex-wrap:wrap;}
+
+/* ── CALCULATOR ──────────────────────────────────────── */
+.engine-badge{
+  font-size:.72rem;letter-spacing:.04em;color:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.35);border-radius:20px;
+  padding:5px 16px;display:inline-block;margin:0 auto 18px;
+  text-align:center;background:rgba(255,255,255,.12);
+}
+.engine-badge.fallback{color:#FFF;border-color:#FFF;background:rgba(154,28,12,.55);}
+.calc-form{
+  max-width:520px;margin:0 auto;
+  background:var(--card);border:1px solid var(--acc);
+  border-radius:var(--r-lg);padding:20px;
+}
+.calc-field{margin-bottom:14px;position:relative;}
+.calc-field label{
+  display:block;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-faint);margin-bottom:6px;
+}
+.calc-field input,.calc-field select{
+  width:100%;background:var(--card-alt);
+  border:1px solid var(--acc);border-radius:var(--r);
+  color:var(--text);font-family:Arial,sans-serif;font-size:.92rem;padding:10px 12px;
+}
+.calc-field input:focus,.calc-field select:focus{outline:none;border-color:var(--red);}
+.calc-row{display:flex;gap:12px;}
+.calc-row .calc-field{flex:1;}
+.city-wrap{position:relative;}
+.ac-dropdown{
+  position:absolute;left:0;right:0;top:100%;z-index:50;
+  background:var(--card);border:1px solid var(--acc-hi);
+  border-radius:0 0 var(--r) var(--r);
+  max-height:280px;overflow-y:auto;box-shadow:0 12px 30px rgba(106,16,10,.25);
+}
+.ac-item{padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--acc);}
+.ac-item:hover,.ac-item.active{background:var(--acc);}
+.ac-name{font-size:.88rem;color:var(--text);}
+.ac-admin{font-size:.72rem;color:var(--text-faint);}
+.ac-empty{padding:10px 12px;font-size:.8rem;color:var(--text-dim);}
+.city-chosen{font-size:.78rem;color:var(--text-dim);margin-top:6px;min-height:1.1em;}
+.city-chosen .err{color:var(--red);}
+.calc-manual{margin-top:4px;}
+.calc-manual summary{font-size:.78rem;color:var(--red);cursor:pointer;padding:4px 0;}
+.calc-manual .muted{font-size:.74rem;color:var(--text-faint);line-height:1.5;margin:4px 0 0;}
+.calc-notime{display:flex;align-items:flex-start;gap:8px;font-size:.8rem;color:var(--text-dim);margin:-4px 0 12px;cursor:pointer;line-height:1.4;}
+.calc-notime input{width:auto;flex-shrink:0;margin-top:2px;accent-color:var(--red);}
+.calc-notime span{color:var(--text-faint);}
+.calc-btn-wrap{text-align:center;margin-top:18px;}
+
+/* ── REPORT ──────────────────────────────────────────── */
+.rep-loading,.rep-warn{text-align:center;padding:20px;color:rgba(255,255,255,.9);font-size:.9rem;}
+.rep-meta{text-align:center;font-size:.76rem;color:rgba(255,255,255,.8);margin:24px 0 0;}
+.rep-notice{border-left:3px solid rgba(255,255,255,.6);background:rgba(255,255,255,.12);padding:10px 14px;border-radius:0 var(--r) var(--r) 0;font-size:.78rem;color:rgba(255,255,255,.92);line-height:1.6;margin:16px 0 0;}
+.rep-notice b{color:#FFF;}
+.rep-section-hed{
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:#FFF;margin:22px 0 12px;
+  display:flex;align-items:center;gap:8px;
+}
+.rep-section-hed::before,.rep-section-hed::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.35);}
+.rep-chart-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;}
+.rep-cell{
+  display:flex;align-items:center;gap:9px;
+  background:var(--card);border:1px solid var(--acc);
+  border-radius:var(--r);padding:8px 11px;
+}
+.rep-cell.rep-lagna{border-color:var(--red);border-width:2px;}
+.rep-sym{font-size:1.3rem;flex-shrink:0;}
+.rep-cell-name{font-size:.82rem;color:var(--text);}
+.rep-cell-pos{font-size:.72rem;color:var(--text-dim);}
+.rep-doshas{display:flex;flex-direction:column;gap:12px;}
+.rep-dosha{
+  background:var(--card);border:1px solid var(--acc);
+  border-radius:var(--r-lg);padding:16px;border-left-width:3px;
+  animation:fadeUp .3s ease;
+}
+.rep-dosha.full{border-left-color:var(--red);}
+.rep-dosha.half{border-left-color:var(--text-faint);}
+.rep-dosha-hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:5px;}
+.rep-dosha-emoji{font-size:1.2rem;}
+.rep-dosha-name{font-family:'Jaipur',Georgia,serif;font-size:1.05rem;color:var(--text);}
+.rep-dosha-state{
+  margin-left:auto;font-size:.66rem;letter-spacing:.05em;
+  padding:3px 10px;border-radius:20px;border:1px solid;white-space:nowrap;
+}
+.rep-dosha-state.full{color:var(--red);border-color:var(--red);background:rgba(229,41,27,.1);}
+.rep-dosha-state.half{color:var(--text-faint);border-color:var(--acc-hi);}
+.rep-dosha-cause{font-size:.72rem;color:var(--red);margin-bottom:6px;}
+.rep-dosha-note{font-size:.76rem;color:var(--red-dark);margin-bottom:6px;}
+.rep-dosha-desc{font-size:.8rem;color:var(--text-dim);line-height:1.55;margin-bottom:12px;}
+.rep-dosha-plt-lbl{font-size:.7rem;color:var(--text-faint);margin-bottom:6px;}
+.rep-dosha-plts{display:flex;flex-wrap:wrap;gap:8px;}
+.rep-plt{
+  display:flex;align-items:center;gap:6px;
+  background:var(--card-alt);border:1px solid var(--acc);
+  border-radius:var(--r);padding:6px 12px;cursor:pointer;
+  font-family:Arial,sans-serif;color:var(--text);font-size:.84rem;
+  transition:border-color .2s,background .2s;
+}
+.rep-plt:hover{border-color:var(--acc-hi);background:var(--card);}
+.rep-plt small{color:var(--text-faint);font-size:.68rem;}
+.rep-clear{
+  border:1px dashed rgba(255,255,255,.5);border-radius:var(--r-lg);
+  text-align:center;padding:22px;color:rgba(255,255,255,.9);font-size:.88rem;
+}
+.rep-absent{margin-top:16px;font-size:.78rem;color:rgba(255,255,255,.82);text-align:center;line-height:1.7;}
+.rep-absent-lbl{color:rgba(255,255,255,.6);}
 </style>
 </head>
 <body>
@@ -369,7 +476,8 @@ body{
     </div>
     <div class="hd-sub">Обучающий симулятор ритуала</div>
     <nav class="nav">
-      <button class="nav-btn on" onclick="goPage('doshas',this)">Доши</button>
+      <button class="nav-btn on" onclick="goPage('chart',this)">Моя карта</button>
+      <button class="nav-btn" onclick="goPage('doshas',this)">Доши</button>
       <button class="nav-btn" onclick="goPage('planets',this)">Планеты</button>
       <button class="nav-btn" onclick="goPage('simulator',this)">Симулятор</button>
     </nav>
@@ -377,7 +485,40 @@ body{
 </header>
 
 <!-- ═══════════════ DOSHAS ═══════════════ -->
-<section class="page on" id="pg-doshas">
+<section class="page on" id="pg-chart">
+  <div class="pg-hed">
+    <div class="pg-title">Калькулятор <em>дош</em></div>
+    <div class="orn"><span>◆</span></div>
+    <div class="pg-body">Введите дату, время и место рождения — приложение рассчитает карту (швейцарские эфемериды, аянамша Лахири) и покажет, какие доши у вас есть и какие планеты очищать.</div>
+  </div>
+  <div style="text-align:center"><div class="engine-badge" id="engineBadge">Загрузка эфемерид…</div></div>
+  <div class="calc-form">
+    <div class="calc-field city-wrap">
+      <label for="city">Место рождения</label>
+      <input id="city" type="text" autocomplete="off" placeholder="Начните вводить — Россия целиком, вкл. сёла и деревни">
+      <div id="acDrop" class="ac-dropdown" hidden></div>
+      <p id="cityChosen" class="city-chosen"></p>
+    </div>
+    <div class="calc-row">
+      <div class="calc-field"><label for="bdate">Дата рождения</label><input id="bdate" type="date"></div>
+      <div class="calc-field"><label for="btime">Время рождения</label><input id="btime" type="time"></div>
+    </div>
+    <label class="calc-notime"><input type="checkbox" id="noTime" onchange="document.getElementById('btime').disabled=this.checked"> Время рождения неизвестно <span>— расчёт на полдень; Лагна, дома и Куджа-доша не определяются</span></label>
+    <details class="calc-manual">
+      <summary>Место не нашлось? Указать пояс и координаты вручную</summary>
+      <div class="calc-field" style="margin-top:8px"><label for="tzManual">Часовой пояс места рождения</label><select id="tzManual"></select></div>
+      <div class="calc-row">
+        <div class="calc-field"><label for="latManual">Широта (°, + север)</label><input id="latManual" type="number" step="0.0001" placeholder="напр. 55.7558"></div>
+        <div class="calc-field"><label for="lonManual">Долгота (°, + восток)</label><input id="lonManual" type="number" step="0.0001" placeholder="напр. 37.6173"></div>
+      </div>
+      <p class="muted">Историческое смещение (декретное/летнее время, реформы) учитывается автоматически по дате рождения. Координаты влияют на Лагну и дома.</p>
+    </details>
+    <div class="calc-btn-wrap"><button class="btn-copper" onclick="runDoshaCalc()">Рассчитать доши</button></div>
+  </div>
+  <div id="dosha-report"></div>
+</section>
+
+<section class="page" id="pg-doshas">
   <div class="pg-hed">
     <div class="pg-title">Определите <em>дошу</em></div>
     <div class="orn"><span>◆</span></div>
@@ -574,7 +715,7 @@ body{
           <div class="s-report" id="s-report"></div>
           <div class="s-btns">
             <button class="btn-copper" onclick="sRestart()">Новая чистка</button>
-            <button class="btn-ghost" onclick="goPage('planets',document.querySelectorAll('.nav-btn')[1])">Изучить планеты</button>
+            <button class="btn-ghost" onclick="goPage('planets')">Изучить планеты</button>
           </div>
         </div>
       </div>
@@ -611,6 +752,7 @@ function goPage(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
   document.getElementById('pg-' + id).classList.add('on');
+  if (!btn) btn = [...document.querySelectorAll('.nav-btn')].find(b => (b.getAttribute('onclick') || '').includes("'" + id + "'"));
   if (btn) btn.classList.add('on');
 }
 
@@ -708,7 +850,7 @@ function showPlanetInfo(pid) {
     </div>
     <div class="d-pinfo-btns">
       <button class="btn-copper" onclick="launchSim('${pid}')">▶ Начать симулятор</button>
-      <button class="btn-ghost" onclick="goPage('planets',document.querySelectorAll('.nav-btn')[1]);pickPlanet('${pid}')">Подробнее →</button>
+      <button class="btn-ghost" onclick="goPage('planets');pickPlanet('${pid}')">Подробнее →</button>
     </div>`;
   panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
@@ -860,7 +1002,7 @@ function launchSim(pid) {
   document.querySelectorAll('.sim-p-opt').forEach(c => c.classList.toggle('sel', c.dataset.pid === pid));
   document.getElementById('sn1').disabled = false;
   syncLabels();
-  goPage('simulator', document.querySelectorAll('.nav-btn')[2]);
+  goPage('simulator');
   sStep = 2; showStep(2); onStepEnter(2);
 }
 
@@ -1137,6 +1279,378 @@ function sRestart() {
 
 showStep(1);
 updateTrail();
+</script>
+
+<!-- исторические часовые пояса (офлайн, с полной историей) -->
+<script src="vendor/moment.min.js"></script>
+<script src="vendor/moment-timezone-with-data.min.js"></script>
+
+<!-- ═══════════════ КАЛЬКУЛЯТОР ДОШ ═══════════════ -->
+<script>
+(function(){
+/* Астродвижок перенесён из «Джйотиш-ректификации»: Swiss Ephemeris (WASM,
+   Moshier) → тропические долготы планет и Асцендента, минус аянамша Лахири →
+   сидерические. Запасной аналитический расчёт (Meeus) для file://.
+   Весь код в IIFE — наружу выставлены только runDoshaCalc и openDosha. */
+const D2R=Math.PI/180, R2D=180/Math.PI;
+function nd(d){return((d%360)+360)%360;}
+function nr(a){a%=2*Math.PI;if(a<0)a+=2*Math.PI;return a;}
+function lahiriAyanamsa(JD){ const t=(JD-2451545.0)/36525.0; return 23.85306 + 1.3968878*t + 0.0003071*t*t; }
+function jdLocal(y,mo,d,h,mi,tz){
+  const ut=h+mi/60-tz; let Y=y,M=mo,D=d+ut/24;
+  if(M<=2){Y--;M+=12;}
+  const A=Math.floor(Y/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(Y+4716))+Math.floor(30.6001*(M+1))+D+B-1524.5;
+}
+let SWE=null, SWE_READY=false, _enginePromise=null;
+function ensureEngine(){ if(!_enginePromise) _enginePromise=initEngine(); return _enginePromise; }
+async function initEngine(){
+  const badge=document.getElementById('engineBadge');
+  try{
+    if(typeof window.exports==='undefined'){ window.exports={}; window.module={exports:window.exports}; }
+    const mod=await import('./swisseph-browser.js');
+    const SwissEphemeris=mod.SwissEphemeris||window.SwissEphemeris||mod.default;
+    const inst=new SwissEphemeris(); await inst.init();
+    const m=inst.module, GREG=1;
+    SWE={
+      julday:(y,mo,d,hUT)=> m.ccall('swe_julday_wrap','number',['number','number','number','number','number'],[y,mo,d,hUT,GREG]),
+      calc:(jd,body,flags)=>{
+        const xx=m._malloc(6*8), se=m._malloc(256);
+        const r=m.ccall('swe_calc_ut_wrap','number',['number','number','number','number','number'],[jd,body,flags,xx,se]);
+        const lon=m.getValue(xx,'double'); m._free(xx); m._free(se);
+        if(r<0) throw new Error('swe_calc_ut failed'); return {lon};
+      },
+      houses:(jd,lat,lon,hsys)=>{
+        const c=m._malloc(13*8), a=m._malloc(10*8);
+        m.ccall('swe_houses_wrap','number',['number','number','number','number','number','number'],[jd,lat,lon,hsys,c,a]);
+        const asc=m.getValue(a,'double'); m._free(c); m._free(a); return asc;
+      }
+    };
+    if(!isFinite(SWE.calc(SWE.julday(2000,1,1,12),0,4|256).lon)) throw new Error('no result');
+    SWE_READY=true;
+    if(badge){ badge.className='engine-badge'; badge.textContent='Швейцарские эфемериды загружены (Moshier) · аянамша Лахири'; }
+  }catch(e){
+    console.warn('Swiss Ephemeris init failed — analytic fallback', e);
+    if(badge){ badge.className='engine-badge fallback'; badge.textContent='Эфемериды не загрузились — приближённый расчёт. Откройте через сервер (python3 -m http.server).'; }
+  }
+}
+const SWE_ID={Sun:0,Moon:1,Mercury:2,Venus:3,Mars:4,Jupiter:5,Saturn:6,Rahu:11};
+const HSYS_WHOLE='W'.charCodeAt(0);
+/* ── аналитический запасной расчёт (Meeus) ── */
+function eps(JD){const T=(JD-2451545)/36525;return 23.439291111-0.013004167*T;}
+function gmst(JD){const T=(JD-2451545)/36525;return nd(280.46061837+360.98564736629*(JD-2451545)+0.000387933*T*T);}
+function sunLon(JD){
+  const T=(JD-2451545)/36525;
+  const L0=280.46646+36000.76983*T+0.0003032*T*T;
+  const M=nd(357.52911+35999.05029*T-0.0001537*T*T)*D2R;
+  const C=(1.914602-0.004817*T-0.000014*T*T)*Math.sin(M)+(0.019993-0.000101*T)*Math.sin(2*M)+0.000289*Math.sin(3*M);
+  const om=nd(125.04-1934.136*T)*D2R;
+  return nd(L0+C-0.00569-0.00478*Math.sin(om));
+}
+function moonLon(JD){
+  const T=(JD-2451545)/36525;
+  const L=nd(218.3164477+481267.88123421*T-0.0015786*T*T);
+  const D=nd(297.8501921+445267.1114034*T-0.0018819*T*T)*D2R;
+  const M=nd(357.5291092+35999.0502909*T-0.0001536*T*T)*D2R;
+  const Mp=nd(134.9633964+477198.8675055*T+0.0087414*T*T)*D2R;
+  const F=nd(93.2720950+483202.0175233*T-0.0036539*T*T)*D2R;
+  const E=1-0.002516*T-0.0000074*T*T;
+  const dl=6.288774*Math.sin(Mp)+1.274027*Math.sin(2*D-Mp)+0.658314*Math.sin(2*D)+0.213618*Math.sin(2*Mp)
+   -0.185116*E*Math.sin(M)-0.114332*Math.sin(2*F)+0.058793*Math.sin(2*D-2*Mp)+0.057066*E*Math.sin(2*D-M-Mp)
+   +0.053322*Math.sin(2*D+Mp)+0.045758*E*Math.sin(2*D-M)-0.040923*E*Math.sin(M-Mp)-0.034720*Math.sin(D)
+   -0.030383*E*Math.sin(M+Mp)+0.015327*Math.sin(2*D-2*F)-0.012528*Math.sin(Mp+2*F)+0.010980*Math.sin(Mp-2*F)
+   +0.010675*Math.sin(4*D-Mp)+0.010034*Math.sin(3*Mp)+0.008548*Math.sin(4*D-2*Mp)-0.007888*E*Math.sin(2*D+M-Mp)
+   -0.006766*E*Math.sin(2*D+M)-0.005163*Math.sin(D-Mp)+0.004987*E*Math.sin(D+M)+0.004036*E*Math.sin(2*D-M+Mp)
+   +0.003994*Math.sin(2*D+2*Mp)+0.003861*Math.sin(4*D)+0.003665*Math.sin(2*D-3*Mp)-0.002689*E*Math.sin(M-2*Mp)
+   -0.002602*Math.sin(2*D-Mp+2*F)+0.002390*E*Math.sin(2*D-M-2*Mp)-0.002348*Math.sin(D+Mp)+0.002236*E*Math.sin(2*D-2*M)
+   -0.002120*E*Math.sin(M+2*Mp)-0.002069*E*E*Math.sin(2*M)+0.002048*E*E*Math.sin(2*D-2*M-Mp)-0.001773*Math.sin(2*D+Mp-2*F)
+   -0.001595*Math.sin(2*D+2*F)+0.001215*E*Math.sin(4*D-M-Mp)-0.001110*Math.sin(2*Mp+2*F)-0.000892*Math.sin(3*D-Mp)
+   -0.000811*E*Math.sin(M+Mp+2*F)+0.000761*E*Math.sin(4*D-M-2*Mp)+0.000704*E*E*Math.sin(2*D-2*M+Mp)-0.000630*E*Math.sin(3*D+Mp);
+  return nd(L+dl);
+}
+const ORB={
+  Mercury:{L0:252.250906,L1:149474.0722491,w0:77.456119,w1:1.556628,e0:0.20563069,e1:-2.04e-5,a:0.387098},
+  Venus:{L0:181.979801,L1:58519.2130302,w0:131.563703,w1:1.402216,e0:0.00677323,e1:-4.94e-5,a:0.723330},
+  Earth:{L0:100.464457,L1:36000.7698278,w0:102.937348,w1:1.719527,e0:0.01670862,e1:-4.24e-5,a:1.000000},
+  Mars:{L0:355.433275,L1:19141.6964746,w0:336.060234,w1:1.840330,e0:0.09341233,e1:9.15e-5,a:1.523688},
+  Jupiter:{L0:34.351519,L1:3036.3027748,w0:14.331309,w1:1.612635,e0:0.04849485,e1:1.63e-4,a:5.202561},
+  Saturn:{L0:50.077444,L1:1223.5110686,w0:93.057209,w1:1.963734,e0:0.05550825,e1:-3.46e-4,a:9.537070},
+};
+function solveKepler(M,e){let E=M;for(let i=0;i<60;i++){const dE=(M-E+e*Math.sin(E))/(1-e*Math.cos(E));E+=dE;if(Math.abs(dE)<1e-11)break;}return E;}
+function helioXY(name,T){const el=ORB[name];const L=nd(el.L0+el.L1*T)*D2R;const w=nd(el.w0+el.w1*T)*D2R;const e=el.e0+el.e1*T;const M=nr(L-w);const E=solveKepler(M,e);const nu=2*Math.atan2(Math.sqrt(1+e)*Math.sin(E/2),Math.sqrt(1-e)*Math.cos(E/2));const r=el.a*(1-e*Math.cos(E));const lam=nu+w;return{x:r*Math.cos(lam),y:r*Math.sin(lam)};}
+function geoLonPlanet(name,T){const p=helioXY(name,T);const e=helioXY('Earth',T);return nd(Math.atan2(p.y-e.y,p.x-e.x)*R2D);}
+function rahuLon(JD){const T=(JD-2451545)/36525;return nd(125.04455501-1934.13626197*T+0.00207696*T*T+0.00000215*T*T*T);}
+function ascLon(JD,lat,lon){
+  const gst=gmst(JD);const lst=nd(gst+lon);const e=eps(JD)*D2R;const L=lat*D2R;const R=lst*D2R;
+  const y=-Math.cos(R);const x=Math.sin(R)*Math.cos(e)+Math.tan(L)*Math.sin(e);
+  let a=nd(Math.atan2(y,x)*R2D);const aR=a*D2R;
+  const alpha=nd(Math.atan2(Math.sin(aR)*Math.cos(e),Math.cos(aR))*R2D);
+  if(nd(lst-alpha)<180)a=nd(a+180); return a;
+}
+function computeChart(y,mo,d,h,mi,tz,lat,lon){
+  const JD=jdLocal(y,mo,d,h,mi,tz); const ay=lahiriAyanamsa(JD);
+  const trop={}; let ascTrop;
+  if(SWE_READY){
+    const utHour=h+mi/60-tz; const jdUT=SWE.julday(y,mo,d,utHour); const FL=4|256;
+    for(const k in SWE_ID) trop[k]=nd(SWE.calc(jdUT,SWE_ID[k],FL).lon);
+    ascTrop=nd(SWE.houses(jdUT,lat,lon,HSYS_WHOLE));
+  }else{
+    trop.Sun=sunLon(JD); trop.Moon=moonLon(JD);
+    trop.Mercury=geoLonPlanet('Mercury',(JD-2451545)/36525); trop.Venus=geoLonPlanet('Venus',(JD-2451545)/36525);
+    trop.Mars=geoLonPlanet('Mars',(JD-2451545)/36525); trop.Jupiter=geoLonPlanet('Jupiter',(JD-2451545)/36525);
+    trop.Saturn=geoLonPlanet('Saturn',(JD-2451545)/36525); trop.Rahu=rahuLon(JD);
+    ascTrop=ascLon(JD,lat,lon);
+  }
+  const sid=t=>nd(t-ay); const pos={};
+  for(const k in trop) pos[k]=sid(trop[k]);
+  pos.Ketu=nd(pos.Rahu+180); pos.Lagna=sid(ascTrop);
+  return {pos,ay};
+}
+function signIdx(lon){return Math.floor(nd(lon)/30);}
+function houseFromLagna(lon,lagLon){return((signIdx(lon)-signIdx(lagLon)+12)%12)+1;}
+
+/* ── поиск города (офлайн-база GeoNames) + ручной пояс ── */
+let META=null, C_name=[], C_norm=[], C_lat=null, C_lon=null, C_admin=null, C_zone=null, CITIES_READY=false;
+function normRu(s){ return s.toLowerCase().replace(/ё/g,'е').replace(/[’'`]/g,'').trim(); }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+async function loadCities(){
+  const status=document.getElementById('cityChosen');
+  try{
+    const [metaResp, gzResp]=await Promise.all([fetch('data/cities-meta.json'),fetch('data/cities.txt.gz')]);
+    META=await metaResp.json(); let text;
+    if('DecompressionStream' in window){
+      const ds=new DecompressionStream('gzip'); text=await new Response(gzResp.body.pipeThrough(ds)).text();
+    }else{ text=await (await fetch('data/cities.txt')).text(); }
+    const lines=text.split('\n'); const n=lines.length-1;
+    C_lat=new Int32Array(n); C_lon=new Int32Array(n); C_admin=new Int32Array(n); C_zone=new Int32Array(n);
+    C_name=new Array(n); C_norm=new Array(n); let k=0;
+    for(let i=0;i<n;i++){ const ln=lines[i]; if(!ln) continue; const t=ln.split('\t');
+      C_name[k]=t[0]; C_norm[k]=normRu(t[0]); C_lat[k]=+t[1]; C_lon[k]=+t[2]; C_admin[k]=+t[3]; C_zone[k]=+t[4]; k++; }
+    if(k<n){ C_name.length=k; C_norm.length=k; }
+    CITIES_READY=true; if(status) status.textContent=''; buildManualZones();
+  }catch(e){
+    console.warn('cities load failed',e);
+    if(status) status.innerHTML='<span class="err">База мест не загрузилась.</span> Запустите через локальный сервер либо укажите пояс и координаты вручную ниже.';
+    buildManualZones();
+  }
+}
+function searchCities(q){
+  q=normRu(q); if(q.length<2) return [];
+  const pre=[], inc=[], LIMIT=40;
+  for(let i=0;i<C_norm.length;i++){ const s=C_norm[i]; const p=s.indexOf(q);
+    if(p===0){ if(pre.length<LIMIT) pre.push(i); } else if(p>0 && inc.length<LIMIT) inc.push(i);
+    if(pre.length>=LIMIT) break; }
+  return pre.concat(inc).slice(0,LIMIT);
+}
+let acItems=[], acActive=-1, selected=null, acTimer=null;
+const cityInput=document.getElementById('city');
+const acDrop=document.getElementById('acDrop');
+const cityChosen=document.getElementById('cityChosen');
+if(cityInput){
+  cityInput.addEventListener('input',()=>{ selected=null; cityChosen.textContent=''; clearTimeout(acTimer); acTimer=setTimeout(runSearch,110); });
+  cityInput.addEventListener('keydown',e=>{
+    if(acDrop.hidden) return;
+    if(e.key==='ArrowDown'){ e.preventDefault(); moveAc(1); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); moveAc(-1); }
+    else if(e.key==='Enter'){ if(acActive>=0){ e.preventDefault(); pickCity(acItems[acActive]); } }
+    else if(e.key==='Escape'){ hideAc(); }
+  });
+  document.addEventListener('click',e=>{ if(!e.target.closest('.city-wrap')) hideAc(); });
+}
+function runSearch(){
+  if(!CITIES_READY) return;
+  const q=cityInput.value; acItems=searchCities(q);
+  if(!q.trim() || acItems.length===0){
+    if(q.trim().length>=2){ acDrop.innerHTML='<div class="ac-empty">Ничего не найдено. Можно указать пояс и координаты вручную ниже.</div>'; acDrop.hidden=false; }
+    else hideAc();
+    acActive=-1; return;
+  }
+  acDrop.innerHTML=acItems.map((idx,j)=>
+    '<div class="ac-item'+(j===0?' active':'')+'" data-j="'+j+'"><div class="ac-name">'+esc(C_name[idx])+'</div><div class="ac-admin">'+esc(META.admins[C_admin[idx]]||'')+'</div></div>').join('');
+  acActive=0; acDrop.hidden=false;
+  acDrop.querySelectorAll('.ac-item').forEach(el=>el.addEventListener('click',()=>pickCity(acItems[+el.dataset.j])));
+}
+function moveAc(dir){
+  const els=acDrop.querySelectorAll('.ac-item'); if(!els.length) return;
+  if(acActive>=0) els[acActive].classList.remove('active');
+  acActive=(acActive+dir+els.length)%els.length;
+  els[acActive].classList.add('active'); els[acActive].scrollIntoView({block:'nearest'});
+}
+function hideAc(){ acDrop.hidden=true; acActive=-1; }
+function pickCity(idx){
+  selected={ name:C_name[idx], admin:META.admins[C_admin[idx]]||'', lat:C_lat[idx]/1e4, lon:C_lon[idx]/1e4, zone:META.zones[C_zone[idx]] };
+  cityInput.value=C_name[idx]; hideAc();
+  cityChosen.innerHTML='<b>'+esc(selected.name)+'</b>, '+esc(selected.admin)+' · пояс <b>'+esc(selected.zone)+'</b> · '+selected.lat.toFixed(3)+', '+selected.lon.toFixed(3);
+}
+const MANUAL_ZONES=[
+  ['Россия и СНГ',[
+    ['Europe/Kaliningrad','Калининград (МСК−1)'],['Europe/Moscow','Москва, Санкт-Петербург (МСК)'],
+    ['Europe/Samara','Самара, Ижевск (МСК+1)'],['Asia/Yekaterinburg','Екатеринбург, Пермь, Уфа (МСК+2)'],
+    ['Asia/Omsk','Омск (МСК+3)'],['Asia/Novosibirsk','Новосибирск (МСК+4)'],
+    ['Asia/Krasnoyarsk','Красноярск, Барнаул (МСК+4)'],['Asia/Irkutsk','Иркутск (МСК+5)'],
+    ['Asia/Yakutsk','Якутск (МСК+6)'],['Asia/Vladivostok','Владивосток, Хабаровск (МСК+7)'],
+    ['Asia/Magadan','Магадан, Сахалин (МСК+8)'],['Asia/Kamchatka','Петропавловск-Камчатский (МСК+9)'],
+    ['Europe/Kyiv','Киев (Украина)'],['Europe/Minsk','Минск (Беларусь)'],['Europe/Chisinau','Кишинёв (Молдова)'],
+    ['Asia/Almaty','Алматы, Астана (Казахстан)'],['Asia/Tashkent','Ташкент (Узбекистан)'],
+    ['Asia/Bishkek','Бишкек (Киргизия)'],['Asia/Dushanbe','Душанбе (Таджикистан)'],
+    ['Asia/Ashgabat','Ашхабад (Туркмения)'],['Asia/Tbilisi','Тбилиси (Грузия)'],
+    ['Asia/Yerevan','Ереван (Армения)'],['Asia/Baku','Баку (Азербайджан)'],
+    ['Europe/Riga','Рига (Латвия)'],['Europe/Vilnius','Вильнюс (Литва)'],['Europe/Tallinn','Таллин (Эстония)']
+  ]],
+  ['Мир',[
+    ['Europe/London','Лондон'],['Europe/Berlin','Берлин, Рим, Париж'],['Europe/Athens','Афины, Хельсинки'],
+    ['Asia/Jerusalem','Иерусалим'],['Asia/Dubai','Дубай'],['Asia/Kolkata','Индия (Дели, Мумбаи)'],
+    ['Asia/Shanghai','Пекин, Шанхай'],['Asia/Tokyo','Токио'],['Australia/Sydney','Сидней'],
+    ['America/New_York','Нью-Йорк'],['America/Chicago','Чикаго'],['America/Los_Angeles','Лос-Анджелес']
+  ]]
+];
+function buildManualZones(){
+  const sel=document.getElementById('tzManual'); if(!sel) return; sel.innerHTML='';
+  for(const [grp,zs] of MANUAL_ZONES){
+    const og=document.createElement('optgroup'); og.label=grp;
+    for(const [z,lbl] of zs){ const o=document.createElement('option'); o.value=z; o.textContent=lbl;
+      if(z==='Europe/Moscow') o.selected=true; og.appendChild(o); }
+    sel.appendChild(og);
+  }
+}
+
+/* ── детекция дош ──
+   Соединение = одна раши (полная). Граха-дришти = ½. Аспекты: все 7-й;
+   Марс 4/7/8; Юпитер 5/7/9; Сатурн 3/7/10; узлы 5/7/9. Куджа — Марс в
+   домах 1,2,4,7,8,12 от Лагны. Каласарпа — все 7 планет в полукруге узлов.
+   Ничха — планета в знаке падения (дебилитации). */
+const SIGNS_RU=['Овен','Телец','Близнецы','Рак','Лев','Дева','Весы','Скорпион','Стрелец','Козерог','Водолей','Рыбы'];
+const ENG2P={Sun:'sun',Moon:'moon',Mars:'mars',Mercury:'mercury',Jupiter:'jupiter',Venus:'venus',Saturn:'saturn',Rahu:'rahu',Ketu:'ketu'};
+const P2ENG={sun:'Sun',moon:'Moon',mars:'Mars',mercury:'Mercury',jupiter:'Jupiter',venus:'Venus',saturn:'Saturn',rahu:'Rahu',ketu:'Ketu'};
+const ASPECT_HOUSES={Sun:[7],Moon:[7],Mercury:[7],Venus:[7],Mars:[4,7,8],Jupiter:[5,7,9],Saturn:[3,7,10],Rahu:[5,7,9],Ketu:[5,7,9]};
+const NICHHA_IDX={sun:6,moon:7,mars:3,mercury:11,jupiter:9,venus:5,saturn:0,rahu:8,ketu:2}; // знаки падения
+const DOSHA_BY_ID={}; DOSHAS.forEach(d=>DOSHA_BY_ID[d.id]=d);
+function houseFrom(sa,sb){ return ((sb-sa+12)%12)+1; }
+function aspectsSign(planet,sa,sb){ return ASPECT_HOUSES[planet].includes(houseFrom(sa,sb)); }
+function pairState(pos,X,Y){
+  const sx=signIdx(pos[X]), sy=signIdx(pos[Y]);
+  if(sx===sy) return 'full';
+  if(aspectsSign(X,sx,sy)||aspectsSign(Y,sy,sx)) return 'half';
+  return null;
+}
+function kalasarpaState(pos){
+  const others=['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn'];
+  const inArc=(lon,start)=>{ const dd=nd(lon-start); return dd>=0 && dd<=180; };
+  const allFrom=start=>others.every(p=>inArc(nd(pos[p]),start));
+  if(allFrom(nd(pos.Rahu))) return {state:'full', note:'Все 7 планет в дуге Раху → Кету'};
+  if(allFrom(nd(pos.Ketu))) return {state:'full', note:'Все 7 планет в дуге Кету → Раху (обратная)'};
+  return null;
+}
+function detectDoshas(chart){
+  const pos=chart.pos; const hse=p=>houseFromLagna(pos[p],pos.Lagna);
+  const out=[]; const add=(id,state,planets,note)=>out.push({id,state,planets,note:note||''});
+  [['matri','Saturn','Moon'],['pitri','Saturn','Sun'],['brahma','Saturn','Jupiter'],['chandala','Jupiter','Rahu']]
+    .forEach(([id,X,Y])=>{ const st=pairState(pos,X,Y); if(st) add(id,st,[ENG2P[X],ENG2P[Y]]); });
+  if(!chart.noTime){ const mh=hse('Mars'); if([1,2,4,7,8,12].includes(mh)) add('kuja','full',['mars'],'Марс в '+mh+'-м доме от Лагны'); }
+  { let best=null; const hits=[];
+    ['Rahu','Ketu'].forEach(N=>{ const st=pairState(pos,'Mars',N); if(st){ hits.push({N,st}); if(best===null||st==='full') best=st; } });
+    if(best){ const inv=new Set(['mars']); const touch=new Set([signIdx(pos.Mars)]);
+      hits.filter(p=>p.st===best).forEach(p=>{ inv.add(ENG2P[p.N]); touch.add(signIdx(pos[p.N])); });
+      const planets=[...inv]; const satWith=touch.has(signIdx(pos.Saturn));
+      if(satWith) planets.push('saturn'); add('pishaca',best,planets,satWith?'Усилена соединением с Сатурном':''); } }
+  { let best=null; const hits=[];
+    [['Sun','Rahu'],['Sun','Ketu'],['Moon','Rahu'],['Moon','Ketu']].forEach(([L,N])=>{ const st=pairState(pos,L,N);
+      if(st){ hits.push({L,N,st}); if(best===null||st==='full') best=st; } });
+    if(best){ const inv=new Set(); hits.filter(p=>p.st===best).forEach(p=>{ inv.add(ENG2P[p.L]); inv.add(ENG2P[p.N]); }); add('grahan',best,[...inv]); } }
+  const ks=kalasarpaState(pos); if(ks) add('kalasarpa',ks.state,['rahu','ketu'],ks.note);
+  const fallen=Object.keys(NICHHA_IDX).filter(pid=>signIdx(pos[P2ENG[pid]])===NICHHA_IDX[pid]);
+  if(fallen.length) add('nichha','full',fallen,'В падении: '+fallen.map(p=>P[p].name).join(', '));
+  return out;
+}
+
+/* ── отчёт ── */
+function rashiName(lon){ return SIGNS_RU[signIdx(lon)]; }
+function doshaCardHtml(x,pos,nt){
+  const d=DOSHA_BY_ID[x.id];
+  const stateLbl = x.id==='nichha' ? 'Планета в падении' : (x.state==='full'?'Соединение · полная':'Аспект · ½ силы');
+  const plts=x.planets.map(pid=>{
+    const eng=P2ENG[pid];
+    const sub=nt?rashiName(pos[eng]):rashiName(pos[eng])+', '+houseFromLagna(pos[eng],pos.Lagna)+'-й дом';
+    return '<button class="rep-plt" onclick="launchSim(\''+pid+'\')" title="Очистить '+P[pid].name+' в симуляторе"><span>'+P[pid].sym+'</span> '+P[pid].name+' <small>'+sub+'</small></button>';
+  }).join('');
+  return '<div class="rep-dosha '+x.state+'">'+
+    '<div class="rep-dosha-hd"><span class="rep-dosha-emoji">'+d.emoji+'</span><span class="rep-dosha-name">'+d.name+'</span><span class="rep-dosha-state '+x.state+'">'+stateLbl+'</span></div>'+
+    '<div class="rep-dosha-cause">'+d.cause+'</div>'+
+    (x.note?'<div class="rep-dosha-note">'+x.note+'</div>':'')+
+    '<div class="rep-dosha-desc">'+d.desc+'</div>'+
+    '<div class="rep-dosha-plt-lbl">Очистить (нажмите планету → симулятор):</div>'+
+    '<div class="rep-dosha-plts">'+plts+'</div>'+
+    '<button class="btn-ghost" style="margin-top:12px;font-size:.78rem;padding:6px 16px" onclick="openDosha(\''+x.id+'\')">Подробнее о доше →</button>'+
+  '</div>';
+}
+function openDosha(id){
+  goPage('doshas');
+  const idx=DOSHAS.findIndex(x=>x.id===id);
+  const cards=document.querySelectorAll('#dosha-grid .d-card');
+  if(idx>=0 && cards[idx]){ pickDosha(DOSHAS[idx],cards[idx]); cards[idx].scrollIntoView({behavior:'smooth',block:'center'}); }
+}
+function renderReport(chart,doshas,meta){
+  const rep=document.getElementById('dosha-report'); const pos=chart.pos; const nt=meta.noTime;
+  const order=['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
+  const lagnaCell=nt?'':'<div class="rep-cell rep-lagna"><span class="rep-sym">⬆️</span><div><div class="rep-cell-name">Лагна (асцендент)</div><div class="rep-cell-pos">'+rashiName(pos.Lagna)+'</div></div></div>';
+  const cells=order.map(k=>{
+    const p=P[ENG2P[k]];
+    const posTxt=nt?rashiName(pos[k]):rashiName(pos[k])+' · '+houseFromLagna(pos[k],pos.Lagna)+'-й дом';
+    return '<div class="rep-cell"><span class="rep-sym">'+p.sym+'</span><div><div class="rep-cell-name">'+p.name+'</div><div class="rep-cell-pos">'+posTxt+'</div></div></div>';
+  }).join('');
+  const presentIds=new Set(doshas.map(x=>x.id));
+  let absent=DOSHAS.filter(d=>!presentIds.has(d.id));
+  if(nt) absent=absent.filter(d=>d.id!=='kuja');
+  const cards=doshas.length? doshas.map(x=>doshaCardHtml(x,pos,nt)).join('')
+    : '<div class="rep-clear">✨ Явных дош не выявлено. Можно провести профилактическую чистку любой планеты.</div>';
+  const absentHtml=absent.length? '<div class="rep-absent"><span class="rep-absent-lbl">Не выявлено:</span> '+absent.map(d=>d.emoji+' '+d.name).join(' · ')+'</div>':'';
+  const notice=nt?('<div class="rep-notice">⏱️ Время рождения не указано — расчёт сделан на полдень. <b>Лагна, дома и Куджа-доша не определяются</b> (для них нужно точное время).'+
+    (meta.moonShift?' В этот день Луна меняет знак — доши с участием Луны (Матри, лунное затмение) приблизительны.':'')+
+    ' Положения планет по знакам надёжны.</div>'):'';
+  rep.innerHTML=
+    '<div class="rep-meta">'+esc(meta.placeName)+' · '+meta.bdate+(nt?' · время не указано':' '+meta.btime)+' · пояс '+esc(meta.zone)+' (UTC'+(meta.tz>=0?'+':'')+meta.tz+')</div>'+
+    notice+
+    '<div class="rep-section-hed">Положения планет</div>'+
+    '<div class="rep-chart-grid">'+lagnaCell+cells+'</div>'+
+    '<div class="rep-section-hed">Ваши доши</div>'+
+    '<div class="rep-doshas">'+cards+'</div>'+absentHtml;
+  rep.scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function runDoshaCalc(){
+  const rep=document.getElementById('dosha-report');
+  const bdate=document.getElementById('bdate').value;
+  const btime=document.getElementById('btime').value;
+  const noTime=document.getElementById('noTime').checked;
+  if(!bdate){ rep.innerHTML='<div class="rep-warn">Укажите дату рождения.</div>'; return; }
+  if(!noTime && !btime){ rep.innerHTML='<div class="rep-warn">Укажите время рождения — или отметьте «Время рождения неизвестно».</div>'; return; }
+  const [y,mo,d]=bdate.split('-').map(Number);
+  const [h,mi]=noTime?[12,0]:btime.split(':').map(Number);
+  let lat,lon,zone,placeName;
+  if(selected){ lat=selected.lat; lon=selected.lon; zone=selected.zone; placeName=selected.name+(selected.admin?', '+selected.admin:''); }
+  else{
+    const latM=parseFloat(document.getElementById('latManual').value);
+    const lonM=parseFloat(document.getElementById('lonManual').value);
+    zone=document.getElementById('tzManual').value||'Europe/Moscow';
+    if(isFinite(latM)&&isFinite(lonM)){ lat=latM; lon=lonM; placeName='координаты вручную'; }
+    else{ rep.innerHTML='<div class="rep-warn">Выберите место рождения из списка или укажите координаты вручную.</div>'; return; }
+  }
+  rep.innerHTML='<div class="rep-loading">Считаю карту…</div>';
+  await ensureEngine();
+  let tz=3;
+  try{ const mm=moment.tz([y,mo-1,d,h,mi],zone); if(mm.isValid()) tz=mm.utcOffset()/60; }catch(e){}
+  const chart=computeChart(y,mo,d,h,mi,tz,lat,lon); chart.noTime=noTime;
+  let moonShift=false;
+  if(noTime){ const c0=computeChart(y,mo,d,0,0,tz,lat,lon), c1=computeChart(y,mo,d,23,59,tz,lat,lon);
+    moonShift=signIdx(c0.pos.Moon)!==signIdx(c1.pos.Moon); }
+  const doshas=detectDoshas(chart);
+  renderReport(chart,doshas,{placeName,zone,tz,bdate,btime,noTime,moonShift});
+}
+
+window.runDoshaCalc=runDoshaCalc;
+window.openDosha=openDosha;
+loadCities();
+ensureEngine();
+})();
 </script>
 
 <footer class="site-footer">
